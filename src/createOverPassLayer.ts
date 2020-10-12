@@ -33,8 +33,8 @@ import {
   extractLocality,
   extractStreet
 } from "./data";
-import { equalsIgnoreCase, textTruncate } from "./utilities/string";
-import { IOverPassLayer } from "leaflet-overpass-layer";
+import { textTruncate } from "./utilities/string";
+import "leaflet-overpass-layer";
 import { delay } from "./utilities/data";
 
 export function createOverPassLayer<M>(
@@ -69,7 +69,7 @@ export function createOverPassLayer<M>(
     retryOnTimeout: true,
     cacheEnabled: true,
     cacheTTL: 86400, // 24h
-    onSuccess(this: IOverPassLayer & L.FeatureGroup<any>, data) {
+    onSuccess(this: L.IOverPassLayer & L.FeatureGroup<any>, data: any) {
       if (!isActive()) return;
 
       for (let i = 0; i < data.elements.length; i++) {
@@ -484,7 +484,7 @@ export function createOverPassLayer<M>(
           return contentElement;
         });
         marker.bindPopup(popup);
-        this._markers.addLayer(marker);
+        this._markers?.addLayer(marker);
       }
       updateCount(local);
     }

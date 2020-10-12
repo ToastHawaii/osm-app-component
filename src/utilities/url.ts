@@ -25,7 +25,7 @@ export function toUrl(url: string | undefined) {
   return url;
 }
 
-export function toWikipediaUrl(wikipedia: string) {
+export function toWikipediaUrl(wikipedia: string | undefined) {
   if (!wikipedia) return undefined;
 
   if (httpRegex.test(wikipedia)) return wikipedia;
@@ -33,7 +33,7 @@ export function toWikipediaUrl(wikipedia: string) {
   return `https://wikipedia.org/wiki/${wikipedia}`;
 }
 
-export function toFacebookUrl(url: string) {
+export function toFacebookUrl(url: string | undefined) {
   if (!url) return undefined;
 
   if (/^www\./i.test(url)) return `https://${url}`;

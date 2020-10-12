@@ -4,14 +4,14 @@
   "description": "",
   "scripts": {
     "build:development": "webpack --config webpack.development.config.js --watch",
-    "build:production": "webpack --config webpack.production.config.js"
+    "build:production": "webpack --config webpack.production.config.js && tsc --build ./src/tsconfig.json"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ToastHawaii/osm-app-component"
   },
   "author": "",
-  "license": "ISC",
+  "license": "AGPL",
   "bugs": {
     "url": "https://github.com/ToastHawaii/osm-app-component/issues"
   },

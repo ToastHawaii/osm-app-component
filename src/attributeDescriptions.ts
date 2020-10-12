@@ -17,7 +17,7 @@
 
 import { Attribute } from "./Generator";
 
-const template = (icon: string, description: string) =>
+const template = (icon: string, description: string | undefined) =>
   `<div><i class="${icon}"></i> ${description}</div>`;
 
 export const attributeDescriptions: Attribute<{ website?: string }>[] = [

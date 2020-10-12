@@ -1,56 +1,19 @@
 const webpack = require("webpack");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const CleanCSSPlugin = require("less-plugin-clean-css");
 const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
-  context: path.join(__dirname, "./"),
-  entry: {
-    en: "./en/local.ts",
-    de: "./de/local.ts",
-    app: "./script.ts"
-  },
+  context: path.join(__dirname, "src"),
+  entry: "./index.ts",
   output: {
-    filename: "[name].js",
-    path: __dirname + "/.."
+    path: path.join(__dirname, "dist"),
+    filename: "index.js"
   },
   plugins: [
-    new HtmlWebpackPlugin({
-      // Load a custom template
-      template: "./en/index.html",
-      filename: "./index.html",
-      chunks: ["app", "en"]
-    }),
-    new HtmlWebpackPlugin({
-      // Load a custom template
-      template: "./de/index.html",
-      filename: "./de/index.html",
-      chunks: ["app", "de"]
-    }),
     new webpack.DefinePlugin({
       "process.env.NODE_ENV": JSON.stringify("production")
-    }),
-    new CopyWebpackPlugin({
-      patterns: [
-        { from: "./www" },
-        {
-          from: "*.css*",
-          to: __dirname + "/../lib/",
-          context: __dirname + "/../node_modules/leaflet/dist/"
-        },
-        {
-          from: "**/*.png",
-          to: __dirname + "/../lib/",
-          context: __dirname + "/../node_modules/leaflet/dist/"
-        },
-        {
-          from: "*.css*",
-          to: __dirname + "/../lib/",
-          context: __dirname + "/../node_modules/leaflet-overpass-layer/dist/"
-        }
-      ]
     }),
     new MiniCssExtractPlugin({
       filename: "[name].css"

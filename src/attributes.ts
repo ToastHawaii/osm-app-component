@@ -17,7 +17,7 @@
 
 import { Attribute, Tags } from "./Generator";
 import { equalsIgnoreCase } from "./utilities/string";
-import { parseOpeningHours } from "./map";
+import { parseOpeningHours } from ".";
 
 const template = (title: string, icon: string, value?: string) =>
   `<span title="${title}" class="attribut"><i class="${icon}"></i>${

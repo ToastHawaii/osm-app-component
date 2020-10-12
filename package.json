@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build:development": "webpack --config src/webpack.development.config.js --watch",
-    "build:production": "webpack --config src/webpack.production.config.js"
+    "build:development": "webpack --config webpack.development.config.js --watch",
+    "build:production": "webpack --config webpack.production.config.js"
   },
   "repository": {
     "type": "git",

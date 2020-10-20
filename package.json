@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/ToastHawaii/osm-app-component"
   },
-  "author": "",
+  "author": "ToastHawaii",
   "license": "AGPL",
   "bugs": {
     "url": "https://github.com/ToastHawaii/osm-app-component/issues"

@@ -1,5 +1,7 @@
 import "leaflet-overpass-layer";
 import { Attribute } from "./Generator";
+import "./style.less";
+import "details-element-polyfill";
 export declare function initMap<M>(filterOptions: {
     id: number;
     group: string;

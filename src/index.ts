@@ -37,6 +37,7 @@ import BigNumber from "bignumber.js";
 import { funding } from "./funding";
 import "./style.less";
 import "details-element-polyfill";
+import { attributes } from "./attributes";
 
 document.addEventListener("click", e => {
   const titleElement = document.querySelector(".attribut .title");
@@ -61,7 +62,7 @@ let map: L.Map;
 const layers: { [name: string]: L.Layer } = {};
 let offers: string[] = [];
 
-export function initMap<M>(
+export function initMap(
   filterOptions: {
     id: number;
     group: string;
@@ -75,7 +76,6 @@ export function initMap<M>(
     edit: string[];
     tags: string[];
   }[],
-  attributes: Attribute<M>[],
   local: any
 ) {
   getHtmlElement(".search").addEventListener("submit", ev => {

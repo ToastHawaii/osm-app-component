@@ -1,5 +1,4 @@
 const webpack = require("webpack");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
 const CleanCSSPlugin = require("less-plugin-clean-css");
 const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
@@ -9,7 +8,9 @@ module.exports = {
   entry: "./index.ts",
   output: {
     path: path.join(__dirname, "dist"),
-    filename: "index.js"
+    filename: "index.js",
+    library: "osmAppComponent",
+    libraryTarget: "umd"
   },
   plugins: [
     new webpack.DefinePlugin({

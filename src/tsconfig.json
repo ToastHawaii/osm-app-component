@@ -21,7 +21,7 @@
     // To enforce this rules, add this configuration.
     "sourceMap": true,
     "module": "commonjs",
-    "target": "es5",
+    "target": "Es5",
     "declaration": true,
     "emitDeclarationOnly": true,
     "typeRoots": [
@@ -31,7 +31,6 @@
   },
   "include": [
     "./**/*",
-    "../webpack.development.config.js"
   ],
   "exclude": [
     "../node_modules",

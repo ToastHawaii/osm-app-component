@@ -1,8 +1,7 @@
 import "leaflet-overpass-layer";
-import { Attribute } from "./Generator";
 import "./style.less";
 import "details-element-polyfill";
-export declare function initMap<M>(filterOptions: {
+export declare function initMap(filterOptions: {
     id: number;
     group: string;
     subgroup?: string;
@@ -14,7 +13,7 @@ export declare function initMap<M>(filterOptions: {
     color: string;
     edit: string[];
     tags: string[];
-}[], attributes: Attribute<M>[], local: any): void;
+}[], local: any): void;
 export declare function overpassSubs(query: string): string;
 export declare function parseOpeningHours(openingHours: string | undefined, localCode: string): any;
 export declare function updateCount(local: any): void;

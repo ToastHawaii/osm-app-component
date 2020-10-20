@@ -13,7 +13,9 @@ module.exports = {
   },
   output: {
     filename: "[name].js",
-    path: __dirname + "/.."
+    path: __dirname + "/..",
+    library: "osmAppComponent",
+    libraryTarget: "umd"
   },
   plugins: [
     new HtmlWebpackPlugin({

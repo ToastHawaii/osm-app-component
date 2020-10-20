@@ -16,7 +16,9 @@
     "url": "https://github.com/ToastHawaii/osm-app-component/issues"
   },
   "homepage": "https://github.com/ToastHawaii/osm-app-component#readme",
+  "main": "dist/index.js",
   "module": "src/index.ts",
+  "types": "dist/index.d.ts",
   "dependencies": {
     "@babel/runtime": "7.11.2",
     "@types/leaflet": "1.5.17",

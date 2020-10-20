@@ -34,6 +34,10 @@ import {
 import { createOverPassLayer, isIOS, shareLink } from "./createOverPassLayer";
 import BigNumber from "bignumber.js";
 import { funding } from "./funding";
+import "leaflet/dist/leaflet.css";
+import "leaflet/dist/images/marker-icon.png";
+import "leaflet/dist/images/marker-shadow.png";
+import "leaflet-overpass-layer/dist/OverPassLayer.css";
 import "./style.less";
 import "details-element-polyfill";
 import { attributes } from "./attributes";

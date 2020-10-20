@@ -26,26 +26,6 @@ module.exports = {
       filename: "./de/index.html",
       chunks: ["de"]
     }),
-    new CopyWebpackPlugin({
-      patterns: [
-        { from: "./www" },
-        {
-          from: "*.css*",
-          to: __dirname + "/../lib/",
-          context: __dirname + "/../node_modules/leaflet/dist/"
-        },
-        {
-          from: "**/*.png",
-          to: __dirname + "/../lib/",
-          context: __dirname + "/../node_modules/leaflet/dist/"
-        },
-        {
-          from: "*.css*",
-          to: __dirname + "/../lib/",
-          context: __dirname + "/../node_modules/leaflet-overpass-layer/dist/"
-        }
-      ]
-    }),
     new MiniCssExtractPlugin({
       filename: "[name].css"
     })
@@ -82,7 +62,7 @@ module.exports = {
       // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
       { enforce: "pre", test: /\.js$/, loader: "source-map-loader" },
       {
-        test: /\.less$/,
+        test: /\.(less|css)$/,
         use: [
           MiniCssExtractPlugin.loader,
           {

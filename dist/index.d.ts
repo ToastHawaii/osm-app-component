@@ -1,4 +1,3 @@
-import "leaflet-overpass-layer";
 import "./style.less";
 import "details-element-polyfill";
 export declare function initMap(filterOptions: {

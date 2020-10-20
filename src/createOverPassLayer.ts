@@ -80,6 +80,9 @@ export function createOverPassLayer<M>(
         let pos: L.LatLng;
         let marker;
 
+        if (!e.tags) throw "Unexpected undefined";
+        const tags = e.tags;
+
         if (e.type === "node") {
           pos = L.latLng(e.lat, e.lon);
         } else {
@@ -96,8 +99,6 @@ export function createOverPassLayer<M>(
             fillOpacity: 0.9
           });
         }
-        if (!e.tags) throw "Unexpected undefined";
-        const tags = e.tags;
         const model = {
           name: extractName(tags, local.code || "en") || tags["piste:name"],
           type: extractType(local, tags, value),

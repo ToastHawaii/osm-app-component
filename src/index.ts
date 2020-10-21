@@ -40,7 +40,6 @@ import "leaflet/dist/images/marker-shadow.png";
 import "leaflet-overpass-layer/dist/OverPassLayer.css";
 import "./style.less";
 import "details-element-polyfill";
-import { attributes } from "./attributes";
 
 document.addEventListener("click", e => {
   const titleElement = document.querySelector(".attribut .title");
@@ -65,7 +64,7 @@ let map: L.Map;
 const layers: { [name: string]: L.Layer } = {};
 let offers: string[] = [];
 
-export function initMap(
+export function initMap<M>(
   baseUrl: string,
   filterOptions: {
     id: number;
@@ -80,6 +79,8 @@ export function initMap(
     edit: string[];
     tags: string[];
   }[],
+  attributes: Attribute<M>[],
+  attributeDescriptions: Attribute<{}>[],
   local: any,
   globalFilter?: (tags: any) => boolean
 ) {
@@ -331,6 +332,7 @@ export function initMap(
               f.icon,
               f.query,
               attributes,
+              attributeDescriptions,
               local,
               f.color,
               globalFilter
@@ -611,6 +613,7 @@ data-taginfo-taglist-options='{"with_count": true, "lang": "${local.code}"}'>
               f.icon,
               f.query,
               attributes,
+              attributeDescriptions,
               local,
               f.color,
               globalFilter
@@ -676,6 +679,7 @@ data-taginfo-taglist-options='{"with_count": true, "lang": "${local.code}"}'>
               f.icon,
               f.query,
               attributes,
+              attributeDescriptions,
               local,
               f.color,
               globalFilter
@@ -708,6 +712,7 @@ function init<M>(
   icon: string,
   query: string,
   attributes: Attribute<M>[],
+  attributeDescriptions: Attribute<{}>[],
   local: any,
   color: string,
   globalFilter?: (tags: any) => boolean
@@ -718,6 +723,7 @@ function init<M>(
     icon,
     query,
     attributes,
+    attributeDescriptions,
     local,
     color,
     () =>

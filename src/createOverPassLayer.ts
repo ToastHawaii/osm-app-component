@@ -24,7 +24,6 @@ import { getJson } from "./utilities/jsonRequest";
 import { getHtmlElement, createElement } from "./utilities/html";
 import { parseOpeningHours, overpassSubs, updateCount } from "./index";
 import * as L from "leaflet";
-import { attributeDescriptions } from "./attributeDescriptions";
 import {
   extractName,
   extractType,
@@ -43,6 +42,7 @@ export function createOverPassLayer<M>(
   icon: string,
   query: string,
   attributes: Attribute<M>[],
+  attributeDescriptions: Attribute<{}>[],
   local: any,
   color: string,
   isActive: () => boolean,

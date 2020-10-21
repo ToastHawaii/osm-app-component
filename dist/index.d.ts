@@ -4,7 +4,7 @@ import "leaflet/dist/images/marker-shadow.png";
 import "leaflet-overpass-layer/dist/OverPassLayer.css";
 import "./style.less";
 import "details-element-polyfill";
-export declare function initMap(filterOptions: {
+export declare function initMap(baseUrl: string, filterOptions: {
     id: number;
     group: string;
     subgroup?: string;
@@ -16,7 +16,7 @@ export declare function initMap(filterOptions: {
     color: string;
     edit: string[];
     tags: string[];
-}[], local: any): void;
+}[], local: any, globalFilter?: (tags: any) => boolean): void;
 export declare function overpassSubs(query: string): string;
 export declare function parseOpeningHours(openingHours: string | undefined, localCode: string): any;
 export declare function updateCount(local: any): void;

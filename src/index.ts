@@ -66,6 +66,7 @@ const layers: { [name: string]: L.Layer } = {};
 let offers: string[] = [];
 
 export function initMap(
+  baseUrl: string,
   filterOptions: {
     id: number;
     group: string;
@@ -79,7 +80,8 @@ export function initMap(
     edit: string[];
     tags: string[];
   }[],
-  local: any
+  local: any,
+  globalFilter?: (tags: any) => boolean
 ) {
   getHtmlElement(".search").addEventListener("submit", ev => {
     ev.preventDefault();
@@ -94,9 +96,7 @@ export function initMap(
     return false;
   });
 
-  (getHtmlElement(
-    ".about"
-  ) as HTMLLinkElement).href = `https://sustainable.zottelig.ch${
+  (getHtmlElement(".about") as HTMLLinkElement).href = `${baseUrl}${
     local.code ? `/${local.code}` : ""
   }/docs/`;
 
@@ -325,7 +325,16 @@ export function initMap(
         for (const f of filterOptions)
           if (f.group + "/" + f.value === o) {
             offers.push(f.group + "/" + f.value);
-            init(f.group, f.value, f.icon, f.query, attributes, local, f.color);
+            init(
+              f.group,
+              f.value,
+              f.icon,
+              f.query,
+              attributes,
+              local,
+              f.color,
+              globalFilter
+            );
 
             (getHtmlElement(
               `#filters input[value='${f.group + "/" + f.value}']`
@@ -596,7 +605,16 @@ data-taginfo-taglist-options='{"with_count": true, "lang": "${local.code}"}'>
           if (!input.checked) {
             input.checked = true;
             offers.push(k + "/" + f.value);
-            init(f.group, f.value, f.icon, f.query, attributes, local, f.color);
+            init(
+              f.group,
+              f.value,
+              f.icon,
+              f.query,
+              attributes,
+              local,
+              f.color,
+              globalFilter
+            );
 
             params["offers"] = offers.toString();
           }
@@ -652,7 +670,16 @@ data-taginfo-taglist-options='{"with_count": true, "lang": "${local.code}"}'>
         function () {
           if (this.checked) {
             offers.push(k + "/" + f.value);
-            init(f.group, f.value, f.icon, f.query, attributes, local, f.color);
+            init(
+              f.group,
+              f.value,
+              f.icon,
+              f.query,
+              attributes,
+              local,
+              f.color,
+              globalFilter
+            );
           } else {
             const index = offers.indexOf(k + "/" + f.value);
             if (index > -1) offers.splice(index, 1);
@@ -682,7 +709,8 @@ function init<M>(
   query: string,
   attributes: Attribute<M>[],
   local: any,
-  color: string
+  color: string,
+  globalFilter?: (tags: any) => boolean
 ) {
   layers[group + "/" + value] = createOverPassLayer(
     group,
@@ -695,7 +723,8 @@ function init<M>(
     () =>
       (getHtmlElement(
         `#filters input[value='${group + "/" + value}']`
-      ) as HTMLInputElement).checked
+      ) as HTMLInputElement).checked,
+    globalFilter
   );
   map.addLayer(layers[group + "/" + value]);
 }

@@ -45,7 +45,8 @@ export function createOverPassLayer<M>(
   attributes: Attribute<M>[],
   local: any,
   color: string,
-  isActive: () => boolean
+  isActive: () => boolean,
+  globalFilter?: (tags: any) => boolean
 ) {
   return new L.OverPassLayer({
     markerIcon: L.divIcon({
@@ -82,7 +83,7 @@ export function createOverPassLayer<M>(
 
         if (!e.tags) throw "Unexpected undefined";
         const tags = e.tags;
-
+        if (globalFilter && globalFilter(tags)) continue;
         if (e.type === "node") {
           pos = L.latLng(e.lat, e.lon);
         } else {

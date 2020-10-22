@@ -15,13 +15,6 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with osm-app-component.  If not, see <http://www.gnu.org/licenses/>.
 
-export function equalsIgnoreCase(
-  s1: string | undefined,
-  s2: string | undefined
-) {
-  return (s1 || "").toUpperCase() === (s2 || "").toUpperCase();
-}
-
 export function startsWithIgnoreCase(
   s: string,
   searchString: string,

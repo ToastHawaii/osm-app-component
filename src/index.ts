@@ -35,11 +35,22 @@ import { createOverPassLayer, isIOS, shareLink } from "./createOverPassLayer";
 import BigNumber from "bignumber.js";
 import { funding } from "./funding";
 import "leaflet/dist/leaflet.css";
-import "leaflet/dist/images/marker-icon.png";
-import "leaflet/dist/images/marker-shadow.png";
 import "leaflet-overpass-layer/dist/OverPassLayer.css";
 import "./style.less";
 import "details-element-polyfill";
+
+// Fix: https://github.com/Leaflet/Leaflet/issues/4968
+import icon from "leaflet/dist/images/marker-icon.png";
+import icon2x from "leaflet/dist/images/marker-icon-2x.png";
+import iconShadow from "leaflet/dist/images/marker-shadow.png";
+
+delete (L.Icon.Default.prototype as any)._getIconUrl;
+
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: icon2x,
+  iconUrl: icon,
+  shadowUrl: iconShadow
+});
 
 document.addEventListener("click", e => {
   const titleElement = document.querySelector(".attribut .title");

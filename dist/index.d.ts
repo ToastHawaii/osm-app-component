@@ -1,7 +1,5 @@
 import { Attribute } from "./Generator";
 import "leaflet/dist/leaflet.css";
-import "leaflet/dist/images/marker-icon.png";
-import "leaflet/dist/images/marker-shadow.png";
 import "leaflet-overpass-layer/dist/OverPassLayer.css";
 import "./style.less";
 import "details-element-polyfill";

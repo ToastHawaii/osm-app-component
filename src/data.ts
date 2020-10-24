@@ -55,14 +55,14 @@ export function extractType(local: any, tags: any, value: string) {
     tags["genus:" + (local.code || "en")] ||
     tags.genus ||
     tags.protection_title ||
-    local.boules[tags.boules] ||
-    local.sport[tags.sport] ||
-    local.amenity[tags.amenity] ||
-    local.leisure[tags.leisure] ||
-    local.man_made[tags.man_made] ||
-    local.landuse[tags.landuse] ||
-    local.natural[tags.natural] ||
-    local.shop[tags.shop] ||
+    getOrDefault(local, "boules")[tags.boules] ||
+    getOrDefault(local, "sport")[tags.sport] ||
+    getOrDefault(local, "amenity")[tags.amenity] ||
+    getOrDefault(local, "leisure")[tags.leisure] ||
+    getOrDefault(local, "man_made")[tags.man_made] ||
+    getOrDefault(local, "landuse")[tags.landuse] ||
+    getOrDefault(local, "natural")[tags.natural] ||
+    getOrDefault(local, "shop")[tags.shop] ||
     getOrDefault(local.type, value).name ||
     local.default
   );

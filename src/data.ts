@@ -43,13 +43,13 @@ export function extractName(tags: any, langCode: string) {
 
 export function extractType(local: any, tags: any, value: string) {
   return (
-    local["public_bookcase:type"][tags["public_bookcase:type"]] ||
-    local["garden:type"][tags["garden:type"]] ||
-    local["garden:style"][tags["garden:style"]] ||
-    local["castle_type"][tags["castle_type"]] ||
-    local["historic"][tags["historic"]] ||
-    local["fitness_station"][tags["fitness_station"]] ||
-    local["site_type"][tags["site_type"]] ||
+    getOrDefault(local, "public_bookcase:type")[tags["public_bookcase:type"]] ||
+    getOrDefault(local, "garden:type")[tags["garden:type"]] ||
+    getOrDefault(local, "garden:style")[tags["garden:style"]] ||
+    getOrDefault(local, "castle_type")[tags["castle_type"]] ||
+    getOrDefault(local, "historic")[tags["historic"]] ||
+    getOrDefault(local, "fitness_station")[tags["fitness_station"]] ||
+    getOrDefault(local, "site_type")[tags["site_type"]] ||
     tags["species:" + (local.code || "en")] ||
     tags.species ||
     tags["genus:" + (local.code || "en")] ||
@@ -63,7 +63,7 @@ export function extractType(local: any, tags: any, value: string) {
     local.landuse[tags.landuse] ||
     local.natural[tags.natural] ||
     local.shop[tags.shop] ||
-    local.type[value].name ||
+    getOrDefault(local.type, value).name ||
     local.default
   );
 }
@@ -113,4 +113,12 @@ export function extractStreet(result: any, local: { code: string }): any {
     extractName(result.namedetails, local.code || "en") ||
     result.address.neighbourhood
   );
+}
+
+function getOrDefault(
+  arr: { [name: string]: { [name: string]: string } },
+  name: string,
+  def: { [name: string]: string } = {}
+) {
+  return arr[name] || def;
 }

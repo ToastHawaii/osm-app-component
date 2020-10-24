@@ -93,7 +93,8 @@ export function initMap<M>(
   attributes: Attribute<M>[],
   attributeDescriptions: Attribute<{}>[],
   local: any,
-  globalFilter?: (tags: any) => boolean
+  globalFilter?: (tags: any) => boolean,
+  minZoom = 14
 ) {
   getHtmlElement(".search").addEventListener("submit", ev => {
     ev.preventDefault();
@@ -149,18 +150,14 @@ export function initMap<M>(
     const zoom = map.getZoom();
 
     let presets = "";
-    document.querySelectorAll(`#filters input`).forEach(e => {
-      if ((e as HTMLInputElement).checked) {
-        const p = filterOptions
-          .filter(
-            o => `${o.group}/${o.value}` === (e as HTMLInputElement).value
-          )
-          .map(o => o.edit.map(t => t.replace(/=/gi, "/")).join(","))
-          .filter(o => o)
-          .join(",");
-        presets += (presets && p ? "," : "") + p;
-      }
-    });
+    for (const o of offers) {
+      const p = filterOptions
+        .filter(f => `${f.group}/${f.value}` === o)
+        .map(o => o.edit.map(t => t.replace(/=/gi, "/")).join(","))
+        .filter(o => o)
+        .join(",");
+      presets += (presets && p ? "," : "") + p;
+    }
 
     if (isIOS())
       window.location.href = `https://gomaposm.com/edit?center=${latlng.lat},${latlng.lng}&zoom=${zoom}`;
@@ -187,7 +184,11 @@ export function initMap<M>(
 
   type State = { lat: number; lng: number; zoom: number };
 
-  const state = get<State>("position") || { lat: 47.37, lng: 8.54, zoom: 14 };
+  const state = get<State>("position") || {
+    lat: 47.37,
+    lng: 8.54,
+    zoom: minZoom
+  };
 
   map = new L.Map("map")
     .addLayer(osm)
@@ -198,7 +199,7 @@ export function initMap<M>(
   let currentAccuracy: L.Layer | L.Circle<any>;
 
   map.on("moveend zoomend", () => {
-    updateCount(local);
+    updateCount(local, minZoom);
     const center = map.getCenter();
     const state = { lat: center.lat, lng: center.lng, zoom: map.getZoom() };
     set<State>("position", state);
@@ -323,7 +324,7 @@ export function initMap<M>(
     });
   }
 
-  function hashchange() {
+  function hashchange(single: boolean) {
     const params = getQueryParams();
 
     let offersParams: string[] = [];
@@ -346,17 +347,19 @@ export function initMap<M>(
               attributeDescriptions,
               local,
               f.color,
+              minZoom,
+              single,
               globalFilter
             );
 
-            (getHtmlElement(
+            const filterElement = getHtmlElement(
               `#filters input[value='${f.group + "/" + f.value}']`
-            ) as HTMLInputElement).checked = true;
+            ) as HTMLInputElement;
+            if (filterElement) filterElement.checked = true;
 
             if (params["info"] === f.group + "/" + f.value)
               showInfoContainer(f);
           }
-
     if (params["location"]) search(params["location"]);
     else if (params["b"]) {
       const bounds = params["b"].split(",").map(b => parseFloat(b));
@@ -511,11 +514,14 @@ data-taginfo-taglist-options='{"with_count": true, "lang": "${local.code}"}'>
     }
   }
 
-  window.addEventListener("hashchange", hashchange);
+  window.addEventListener("hashchange", () => {
+    hashchange(filterOptions.length === 1);
+  });
 
   setTimeout(() => {
-    offers = [];
-    hashchange();
+    if (filterOptions.length > 1) offers = [];
+    else offers = filterOptions.map(f => `${f.group}/${f.value}`);
+    hashchange(filterOptions.length === 1);
   }, 0);
 
   const params = getQueryParams();
@@ -552,169 +558,179 @@ data-taginfo-taglist-options='{"with_count": true, "lang": "${local.code}"}'>
     });
   });
 
-  const groups = groupBy(
-    filterOptions
-      .sort((a, b) =>
-        local.type[a.value].name.localeCompare(local.type[b.value].name)
-      )
-      .sort((a, b) => local.group[a.group].localeCompare(local.group[b.group]))
-      .sort((a, b) => (a.subgroup || "").localeCompare(b.subgroup || ""))
-      .sort((a, b) => (b.order || 1000) - (a.order || 1000)),
-    "group"
-  );
   let iconColors = "";
-  for (const k in groups) {
-    const group = groups[k];
-    const detailsElement = createElement("details");
-    const summaryElement = createElement(
-      "summary",
-      `<span>${local.group[k]}</span>`
-    );
-    detailsElement.appendChild(summaryElement);
+  for (const f of filterOptions) {
+    if (f.color) {
+      const rgb = hexToRgb(f.color);
+      const color = new Color(rgb[0], rgb[1], rgb[2]);
+      const solver = new Solver(color);
+      const result = solver.solve();
 
-    for (const f of group) {
-      let contentElement: HTMLLabelElement;
-      if (f.color) {
-        const rgb = hexToRgb(f.color);
-        const color = new Color(rgb[0], rgb[1], rgb[2]);
-        const solver = new Solver(color);
-        const result = solver.solve();
-
-        iconColors += `.${f.value}-icon{${result.filter.replace(
-          /filter:/gi,
-          "filter: brightness(0%)"
-        )}}`;
-      }
-
-      if (!f.subgroup) {
-        contentElement = createElement(
-          "label",
-          `
-          <input value="${k + "/" + f.value}" type="checkbox" />
-          <div class="filter-background"></div>
-          <div class="filter-label">
-            <img class="${f.value}-icon"
-              src="${f.icon}"
-            />
-            <span>${local.type[f.value].name}</span>
-          </div>`,
-          ["filter", "filter-" + k + "-" + f.value]
-        );
-
-        const aElement = createElement(
-          "a",
-          `<i class="fas fa-info-circle"></i>`
-        );
-        aElement.title = local.type[f.value].name;
-        aElement.href = `?offers=${k + "/" + f.value}&info=${
-          k + "/" + f.value
-        }`;
-        aElement.addEventListener("click", ev => {
-          ev.preventDefault();
-
-          const params = getQueryParams();
-
-          const input = getHtmlElement("input", contentElement);
-          if (!input.checked) {
-            input.checked = true;
-            offers.push(k + "/" + f.value);
-            init(
-              f.group,
-              f.value,
-              f.icon,
-              f.query,
-              attributes,
-              attributeDescriptions,
-              local,
-              f.color,
-              globalFilter
-            );
-
-            params["offers"] = offers.toString();
-          }
-
-          showInfoContainer(f);
-
-          params["info"] = f.group + "/" + f.value;
-
-          setQueryParams(params);
-
-          partAreaVisible();
-
-          return false;
-        });
-        detailsElement.appendChild(aElement);
-        getHtmlElement(".info-container .close-button").addEventListener(
-          "click",
-          () => {
-            getHtmlElement(".info-container").style.display = "none";
-
-            document.title = local.title;
-            document
-              .querySelector('meta[name="description"]')
-              ?.setAttribute("content", local.description);
-
-            const params = getQueryParams();
-            params["info"] = "";
-            setQueryParams(params);
-          }
-        );
-
-        detailsElement.appendChild(contentElement);
-      } else {
-        const group = getHtmlElement(
-          ".filter-" + k + "-" + f.subgroup,
-          detailsElement
-        );
-
-        contentElement = createElement(
-          "label",
-          `<input value="${k + "/" + f.value}" type="checkbox" />
-              <div class="filter-sub-background"></div>
-              <i class="${f.button}" style="color: ${f.color}" title="${
-            local.type[f.value].name
-          }"></i>`,
-          ["filter", "filter-sub", "filter-" + k + "-" + f.value]
-        );
-
-        detailsElement.insertBefore(contentElement, group);
-      }
-      getHtmlElement("input", contentElement).addEventListener(
-        "change",
-        function () {
-          if (this.checked) {
-            offers.push(k + "/" + f.value);
-            init(
-              f.group,
-              f.value,
-              f.icon,
-              f.query,
-              attributes,
-              attributeDescriptions,
-              local,
-              f.color,
-              globalFilter
-            );
-          } else {
-            const index = offers.indexOf(k + "/" + f.value);
-            if (index > -1) offers.splice(index, 1);
-
-            map.removeLayer(layers[k + "/" + f.value]);
-          }
-
-          const params = getQueryParams();
-          params["offers"] = offers.toString();
-          setQueryParams(params);
-
-          updateCount(local);
-        }
-      );
+      iconColors += `.${f.value}-icon{${result.filter.replace(
+        /filter:/gi,
+        "filter: brightness(0%)"
+      )}}`;
     }
-    getHtmlElement("#filters").appendChild(detailsElement);
   }
-
   const style = createElement("style", iconColors);
   document.head.appendChild(style);
+
+  if (filterOptions.length > 1) {
+    const groups = groupBy(
+      filterOptions
+        .sort((a, b) =>
+          local.type[a.value].name.localeCompare(local.type[b.value].name)
+        )
+        .sort((a, b) =>
+          local.group[a.group].localeCompare(local.group[b.group])
+        )
+        .sort((a, b) => (a.subgroup || "").localeCompare(b.subgroup || ""))
+        .sort((a, b) => (b.order || 1000) - (a.order || 1000)),
+      "group"
+    );
+    for (const k in groups) {
+      const group = groups[k];
+      const detailsElement = createElement("details");
+      const summaryElement = createElement(
+        "summary",
+        `<span>${local.group[k]}</span>`
+      );
+      detailsElement.appendChild(summaryElement);
+
+      for (const f of group) {
+        let contentElement: HTMLLabelElement;
+
+        if (!f.subgroup) {
+          contentElement = createElement(
+            "label",
+            `
+            <input value="${k + "/" + f.value}" type="checkbox" />
+            <div class="filter-background"></div>
+            <div class="filter-label">
+              <img class="${f.value}-icon"
+                src="${f.icon}"
+              />
+              <span>${local.type[f.value].name}</span>
+            </div>`,
+            ["filter", "filter-" + k + "-" + f.value]
+          );
+
+          const aElement = createElement(
+            "a",
+            `<i class="fas fa-info-circle"></i>`
+          );
+          aElement.title = local.type[f.value].name;
+          aElement.href = `?offers=${k + "/" + f.value}&info=${
+            k + "/" + f.value
+          }`;
+          aElement.addEventListener("click", ev => {
+            ev.preventDefault();
+
+            const params = getQueryParams();
+
+            const input = getHtmlElement("input", contentElement);
+            if (!input.checked) {
+              input.checked = true;
+              offers.push(k + "/" + f.value);
+              init(
+                f.group,
+                f.value,
+                f.icon,
+                f.query,
+                attributes,
+                attributeDescriptions,
+                local,
+                f.color,
+                minZoom,
+                filterOptions.length <= 1,
+                globalFilter
+              );
+
+              params["offers"] = offers.toString();
+            }
+
+            showInfoContainer(f);
+
+            params["info"] = f.group + "/" + f.value;
+
+            setQueryParams(params);
+
+            partAreaVisible();
+
+            return false;
+          });
+          detailsElement.appendChild(aElement);
+          getHtmlElement(".info-container .close-button").addEventListener(
+            "click",
+            () => {
+              getHtmlElement(".info-container").style.display = "none";
+
+              document.title = local.title;
+              document
+                .querySelector('meta[name="description"]')
+                ?.setAttribute("content", local.description);
+
+              const params = getQueryParams();
+              params["info"] = "";
+              setQueryParams(params);
+            }
+          );
+
+          detailsElement.appendChild(contentElement);
+        } else {
+          const group = getHtmlElement(
+            ".filter-" + k + "-" + f.subgroup,
+            detailsElement
+          );
+
+          contentElement = createElement(
+            "label",
+            `<input value="${k + "/" + f.value}" type="checkbox" />
+                <div class="filter-sub-background"></div>
+                <i class="${f.button}" style="color: ${f.color}" title="${
+              local.type[f.value].name
+            }"></i>`,
+            ["filter", "filter-sub", "filter-" + k + "-" + f.value]
+          );
+
+          detailsElement.insertBefore(contentElement, group);
+        }
+        getHtmlElement("input", contentElement).addEventListener(
+          "change",
+          function () {
+            if (this.checked) {
+              offers.push(k + "/" + f.value);
+              init(
+                f.group,
+                f.value,
+                f.icon,
+                f.query,
+                attributes,
+                attributeDescriptions,
+                local,
+                f.color,
+                minZoom,
+                filterOptions.length <= 1,
+                globalFilter
+              );
+            } else {
+              const index = offers.indexOf(k + "/" + f.value);
+              if (index > -1) offers.splice(index, 1);
+
+              map.removeLayer(layers[k + "/" + f.value]);
+            }
+
+            const params = getQueryParams();
+            params["offers"] = offers.toString();
+            setQueryParams(params);
+
+            updateCount(local, minZoom);
+          }
+        );
+      }
+      getHtmlElement("#filters").appendChild(detailsElement);
+    }
+  }
 }
 
 function init<M>(
@@ -726,6 +742,8 @@ function init<M>(
   attributeDescriptions: Attribute<{}>[],
   local: any,
   color: string,
+  minZoom: number,
+  single: boolean,
   globalFilter?: (tags: any) => boolean
 ) {
   layers[group + "/" + value] = createOverPassLayer(
@@ -737,10 +755,15 @@ function init<M>(
     attributeDescriptions,
     local,
     color,
-    () =>
-      (getHtmlElement(
+    minZoom,
+    single,
+    () => {
+      const filterElement = getHtmlElement(
         `#filters input[value='${group + "/" + value}']`
-      ) as HTMLInputElement).checked,
+      ) as HTMLInputElement;
+      if (filterElement) return filterElement.checked;
+      else return true;
+    },
     globalFilter
   );
   map.addLayer(layers[group + "/" + value]);
@@ -777,9 +800,11 @@ export function parseOpeningHours(
 
 let emptyIndicatorElement: HTMLDivElement | undefined;
 
-export function updateCount(local: any) {
+export function updateCount(local: any, minZoom: number) {
   const visible =
-    countMarkersInView(map) === 0 && offers.length > 0 && map.getZoom() >= 14;
+    countMarkersInView(map) === 0 &&
+    offers.length > 0 &&
+    map.getZoom() >= minZoom;
   if (visible && !emptyIndicatorElement) {
     emptyIndicatorElement = createElement(
       "div",

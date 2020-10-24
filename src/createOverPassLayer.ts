@@ -45,6 +45,8 @@ export function createOverPassLayer<M>(
   attributeDescriptions: Attribute<{}>[],
   local: any,
   color: string,
+  minZoom: number,
+  single: boolean,
   isActive: () => boolean,
   globalFilter?: (tags: any, group: string, value: string) => boolean
 ) {
@@ -64,7 +66,7 @@ export function createOverPassLayer<M>(
       minZoomMessageNoLayer: local.minZoomMessageNoLayer,
       minZoomMessage: local.minZoomMessage
     },
-    minZoom: 14,
+    minZoom: minZoom,
     query: `(${overpassSubs(query)});out center;`,
     timeout: 30, // Seconds
     retryOnTimeout: true,
@@ -225,11 +227,11 @@ export function createOverPassLayer<M>(
         share.addEventListener("click", function (e) {
           e.preventDefault();
           shareLink(
-            `${window.location.origin}${
-              window.location.pathname
-            }?offers=${group}/${value}&location=${model.address.latitude},${
-              model.address.longitude
-            }${info ? `&info=${info}` : ``}`,
+            `${window.location.origin}${window.location.pathname}?${
+              !single ? `offers=${group}/${value}&` : ""
+            }location=${model.address.latitude},${model.address.longitude}${
+              info ? `&info=${info}` : ``
+            }`,
             share,
             local,
             toTitle(model),
@@ -488,7 +490,7 @@ export function createOverPassLayer<M>(
         marker.bindPopup(popup);
         this._markers?.addLayer(marker);
       }
-      updateCount(local);
+      updateCount(local, minZoom);
     }
   });
 }

@@ -15,7 +15,7 @@ export declare function initMap<M>(baseUrl: string, filterOptions: {
     color: string;
     edit: string[];
     tags: string[];
-}[], attributes: Attribute<M>[], attributeDescriptions: Attribute<{}>[], local: any, globalFilter?: (tags: any) => boolean): void;
+}[], attributes: Attribute<M>[], attributeDescriptions: Attribute<{}>[], local: any, globalFilter?: (tags: any) => boolean, minZoom?: number): void;
 export declare function overpassSubs(query: string): string;
 export declare function parseOpeningHours(openingHours: string | undefined, localCode: string): any;
-export declare function updateCount(local: any): void;
+export declare function updateCount(local: any, minZoom: number): void;

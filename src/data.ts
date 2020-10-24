@@ -62,7 +62,9 @@ export function extractType(local: any, tags: any, value: string) {
     local.man_made[tags.man_made] ||
     local.landuse[tags.landuse] ||
     local.natural[tags.natural] ||
-    local.type[value].name
+    local.shop[tags.shop] ||
+    local.type[value].name ||
+    local.default
   );
 }
 

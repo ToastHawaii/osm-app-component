@@ -327,39 +327,56 @@ export function initMap<M>(
   function hashchange(single: boolean) {
     const params = getQueryParams();
 
-    let offersParams: string[] = [];
+    if (!single) {
+      let offersParams: string[] = [];
 
-    if (params["offers"]) offersParams = params["offers"].split(",");
-    else if (params["o"])
-      offersParams = offersfromShort(params["o"], filterOptions);
+      if (params["offers"]) offersParams = params["offers"].split(",");
+      else if (params["o"])
+        offersParams = offersfromShort(params["o"], filterOptions);
 
-    for (const o of offersParams)
-      if (offers.indexOf(o) === -1)
-        for (const f of filterOptions)
-          if (f.group + "/" + f.value === o) {
-            offers.push(f.group + "/" + f.value);
-            init(
-              f.group,
-              f.value,
-              f.icon,
-              f.query,
-              attributes,
-              attributeDescriptions,
-              local,
-              f.color,
-              minZoom,
-              single,
-              globalFilter
-            );
+      for (const o of offersParams)
+        if (offers.indexOf(o) === -1)
+          for (const f of filterOptions)
+            if (f.group + "/" + f.value === o) {
+              offers.push(f.group + "/" + f.value);
+              init(
+                f.group,
+                f.value,
+                f.icon,
+                f.query,
+                attributes,
+                attributeDescriptions,
+                local,
+                f.color,
+                minZoom,
+                single,
+                globalFilter
+              );
 
-            const filterElement = getHtmlElement(
-              `#filters input[value='${f.group + "/" + f.value}']`
-            ) as HTMLInputElement;
-            if (filterElement) filterElement.checked = true;
+              (getHtmlElement(
+                `#filters input[value='${f.group + "/" + f.value}']`
+              ) as HTMLInputElement).checked = true;
 
-            if (params["info"] === f.group + "/" + f.value)
-              showInfoContainer(f);
-          }
+              if (params["info"] === f.group + "/" + f.value)
+                showInfoContainer(f);
+            }
+    } else {
+      for (const f of filterOptions)
+        init(
+          f.group,
+          f.value,
+          f.icon,
+          f.query,
+          attributes,
+          attributeDescriptions,
+          local,
+          f.color,
+          minZoom,
+          single,
+          globalFilter
+        );
+    }
+
     if (params["location"]) search(params["location"]);
     else if (params["b"]) {
       const bounds = params["b"].split(",").map(b => parseFloat(b));
@@ -758,7 +775,7 @@ function init<M>(
     minZoom,
     single,
     () => {
-      const filterElement = getHtmlElement(
+      const filterElement = document.querySelector(
         `#filters input[value='${group + "/" + value}']`
       ) as HTMLInputElement;
       if (filterElement) return filterElement.checked;

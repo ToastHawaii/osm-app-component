@@ -63,7 +63,7 @@ export function extractType(local: any, tags: any, value: string) {
     getOrDefault(local, "landuse")[tags.landuse] ||
     getOrDefault(local, "natural")[tags.natural] ||
     getOrDefault(local, "shop")[tags.shop] ||
-    getOrDefault(local.type, value).name ||
+    getOrDefault(local, "type", value).name ||
     local.default
   );
 }
@@ -115,10 +115,16 @@ export function extractStreet(result: any, local: { code: string }): any {
   );
 }
 
+type Local = { [name: string]: Local };
+
 function getOrDefault(
-  arr: { [name: string]: { [name: string]: string } },
-  name: string,
-  def: { [name: string]: string } = {}
-) {
-  return arr[name] || def;
+  arr: Local,
+  ...names: string[]
+): { [name: string]: string } {
+  if (names.length > 1)
+    return getOrDefault(
+      arr[names[0]] || {},
+      ...names.slice(1, names.length)
+    ) as { [name: string]: string };
+  else return ((arr[names[0]] || {}) as unknown) as { [name: string]: string };
 }

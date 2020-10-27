@@ -19,7 +19,7 @@ import { getQueryParams, utilQsString } from "./utilities/url";
 import { Generator, Attribute } from "./Generator";
 import { links } from "./links";
 import { isImage } from "./utilities/image";
-import { toTitle, toLevel, toOpenOrClose } from "./view";
+import { toTitle, toLevel, toOpenOrClose, toSeasonal } from "./view";
 import { getJson } from "./utilities/jsonRequest";
 import { getHtmlElement, createElement } from "./utilities/html";
 import { parseOpeningHours, overpassSubs, updateCount } from "./index";
@@ -119,6 +119,7 @@ export function createOverPassLayer<M>(
           opening:
             parseOpeningHours(tags.service_times, local.code || "en") ||
             parseOpeningHours(tags.opening_hours, local.code || "en"),
+          seasonal: tags.seasonal,
           conditionalFee:
             tags.fee &&
             (parseOpeningHours(tags.fee, local.code || "en") ||
@@ -164,6 +165,11 @@ export function createOverPassLayer<M>(
         ${
           model.opening
             ? `<br><div>${toOpenOrClose(model.opening, local)}</div>`
+            : ``
+        }
+        ${
+          model.seasonal
+            ? `<br><div>${toSeasonal(model.seasonal, local)}</div>`
             : ``
         }
         ${

@@ -6,3 +6,6 @@ export declare function extractLocality(address: any): any;
 export declare function extractStreet(result: any, local: {
     code: string;
 }): any;
+export declare function getOrDefault(arr: any, ...names: string[]): {
+    [name: string]: string;
+};

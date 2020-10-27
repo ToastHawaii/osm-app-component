@@ -27,3 +27,8 @@ export declare function toOpenOrClose(model: {
     closes: string;
     opens: string;
 }): string | undefined;
+export declare function toSeasonal(value: string, local: {
+    seasonal: {
+        [name: string]: string;
+    };
+}): string;

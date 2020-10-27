@@ -115,10 +115,8 @@ export function extractStreet(result: any, local: { code: string }): any {
   );
 }
 
-type Local = { [name: string]: Local };
-
-function getOrDefault(
-  arr: Local,
+export function getOrDefault(
+  arr: any,
   ...names: string[]
 ): { [name: string]: string } {
   if (names.length > 1)

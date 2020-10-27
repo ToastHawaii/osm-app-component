@@ -16,6 +16,7 @@
 // along with osm-app-component.  If not, see <http://www.gnu.org/licenses/>.
 
 import * as moment from "moment";
+import { getOrDefault } from "./data";
 
 export function toTitle(model: {
   name: string;
@@ -109,6 +110,16 @@ export function toOpenOrClose(
     return undefined;
   }
   return output;
+}
+
+export function toSeasonal(
+  value: string,
+  local: { seasonal: { [name: string]: string } }
+) {
+  return value
+    .split(";")
+    .map(v => getOrDefault(local, "seasonal")[v])
+    .join(", ");
 }
 
 function isNumeric(n: any) {

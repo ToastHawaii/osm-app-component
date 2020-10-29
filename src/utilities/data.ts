@@ -31,3 +31,27 @@ export function delay(ms: number) {
 export function getRandomInt(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
+
+/**
+ * Simple object check.
+ */
+export function isObject(item: any) {
+  return item && typeof item === "object" && !Array.isArray(item);
+}
+
+/**
+ * Deep merge two objects.
+ */
+export function mergeDeep<T, S>(target: T, source: S) {
+  if (isObject(target) && isObject(source)) {
+    for (const key in source) {
+      if (isObject(source[key])) {
+        if (!(target as any)[key]) Object.assign(target, { [key]: {} });
+        mergeDeep((target as any)[key], source[key]);
+      } else {
+        Object.assign(target, { [key]: source[key] });
+      }
+    }
+  }
+  return target;
+}

@@ -24,7 +24,7 @@ import { setQueryParams, getQueryParams } from "./utilities/url";
 import { Attribute } from "./Generator";
 import { getJson } from "./utilities/jsonRequest";
 import { get, set } from "./utilities/storage";
-import { groupBy, delay, getRandomInt } from "./utilities/data";
+import { groupBy, delay, getRandomInt, mergeDeep } from "./utilities/data";
 import { toString } from "./utilities/string";
 import {
   getHtmlElement,
@@ -32,6 +32,8 @@ import {
   createElement
 } from "./utilities/html";
 import { createOverPassLayer, isIOS, shareLink } from "./createOverPassLayer";
+import { local as localEn } from "./en/local";
+import { local as localDe } from "./de/local";
 import BigNumber from "bignumber.js";
 import { funding } from "./funding";
 import "leaflet/dist/leaflet.css";
@@ -96,6 +98,12 @@ export function initMap<M>(
   globalFilter?: (tags: any) => boolean,
   minZoom = 14
 ) {
+  const existingLocal = { "": localEn, de: localDe } as {
+    [code: string]: typeof localEn;
+  };
+
+  local = mergeDeep(local, existingLocal[local.code]);
+
   getHtmlElement(".search").addEventListener("submit", ev => {
     ev.preventDefault();
     search();

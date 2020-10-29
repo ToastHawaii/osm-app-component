@@ -32,8 +32,7 @@ import {
   createElement
 } from "./utilities/html";
 import { createOverPassLayer, isIOS, shareLink } from "./createOverPassLayer";
-import { local as localEn } from "./en/local";
-import { local as localDe } from "./de/local";
+
 import BigNumber from "bignumber.js";
 import { funding } from "./funding";
 import "leaflet/dist/leaflet.css";
@@ -77,7 +76,7 @@ let map: L.Map;
 const layers: { [name: string]: L.Layer } = {};
 let offers: string[] = [];
 
-export function initMap<M>(
+export async function initMap<M>(
   baseUrl: string,
   filterOptions: {
     id: number;
@@ -98,11 +97,9 @@ export function initMap<M>(
   globalFilter?: (tags: any) => boolean,
   minZoom = 14
 ) {
-  const existingLocal = { "": localEn, de: localDe } as {
-    [code: string]: typeof localEn;
-  };
+  const existingLocal = await import(`/${local.code || "en"}/local`);
 
-  local = mergeDeep(local, existingLocal[local.code]);
+  local = mergeDeep(local, existingLocal);
 
   getHtmlElement(".search").addEventListener("submit", ev => {
     ev.preventDefault();
@@ -911,6 +908,8 @@ setInterval(async () => {
     return;
 
   const markers: HTMLElement[] = [];
+
+  if (!map) return;
   const mapBounds = map.getBounds();
   map.eachLayer(layer => {
     if (layer instanceof L.Marker) {

@@ -228,7 +228,7 @@ export function createOverPassLayer<M>(
         <details class="more">
         <summary>${local.documentation}</summary>
         <table class="osm-data">
-        ${renderTags(tags)}
+        ${renderTags(tags, local)}
         </table>
         </details>
         </div>`
@@ -668,14 +668,16 @@ function copyTextToClipboard(text: string) {
   document.body.removeChild(textArea);
 }
 
-function renderTags(tags: any) {
+function renderTags(tags: any, local: any) {
   const pairs: string[] = [];
   for (const key in tags) {
     if (Object.prototype.hasOwnProperty.call(tags, key)) {
       const element = tags[key];
 
       pairs.push(
-        `<tr><td title="${key}">${key}</td><td title="${element}">= ${element}</td></tr>`
+        `<tr><td title="${key}"><a href="https://wiki.openstreetmap.org/wiki/Key:${key}?uselang=${
+          local.code || "en"
+        }" target="_blank">${key}</a></td><td title="${element}">= ${element}</td></tr>`
       );
     }
   }

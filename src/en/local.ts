@@ -18,6 +18,8 @@
 export const local = {
   code: "",
 
+  documentation: "Documentation",
+
   floor: (level: number) => `(${level}F)`,
   groundFloor: function (_level: number) {
     return `(GF)`;

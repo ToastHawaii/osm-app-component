@@ -225,6 +225,12 @@ export function createOverPassLayer<M>(
             : ``
         }
         </div>
+        <details class="more">
+        <summary>${local.documentation}</summary>
+        <table class="osm-data">
+        ${renderTags(tags)}
+        </table>
+        </details>
         </div>`
         );
 
@@ -660,6 +666,20 @@ function copyTextToClipboard(text: string) {
   }
 
   document.body.removeChild(textArea);
+}
+
+function renderTags(tags: any) {
+  const pairs: string[] = [];
+  for (const key in tags) {
+    if (Object.prototype.hasOwnProperty.call(tags, key)) {
+      const element = tags[key];
+
+      pairs.push(
+        `<tr><td title="${key}">${key}</td><td title="${element}">= ${element}</td></tr>`
+      );
+    }
+  }
+  return pairs.join("");
 }
 
 export function isIOS() {

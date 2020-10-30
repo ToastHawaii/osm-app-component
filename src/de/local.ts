@@ -18,6 +18,8 @@
 export const local = {
   code: "de",
 
+  documentation: "Dokumentation",
+
   floor: function (level: number) {
     return `(${level}. OG)`;
   },

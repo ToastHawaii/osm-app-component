@@ -99,7 +99,7 @@ export async function initMap<M>(
 ) {
   const existingLocal = await import(`/${local.code || "en"}/local`);
 
-  local = mergeDeep(local, existingLocal);
+  local = mergeDeep(local, existingLocal.local);
 
   getHtmlElement(".search").addEventListener("submit", ev => {
     ev.preventDefault();

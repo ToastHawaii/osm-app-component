@@ -1,5 +1,6 @@
 export declare const local: {
     code: string;
+    documentation: string;
     floor: (level: number) => string;
     groundFloor: (_level: number) => string;
     basement: (level: number) => string;

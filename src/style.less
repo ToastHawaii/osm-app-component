@@ -141,6 +141,31 @@ button {
   max-width: 110px;
 }
 
+.more {
+  summary {
+    padding: 8px 0 0 0;
+  }
+}
+.osm-data td:first-child {
+  width: 33%;
+}
+
+table.osm-data {
+  /* magic */
+  width: 100%;
+  table-layout: fixed;
+
+  /*not really necessary, removes extra white space */
+  border-collapse: collapse;
+  border-spacing: 0;
+  border: 0;
+}
+.osm-data td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 #filters {
   position: absolute;
   top: 80px;

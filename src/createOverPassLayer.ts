@@ -227,6 +227,9 @@ export function createOverPassLayer<M>(
         </div>
         <details class="more">
         <summary>${local.documentation}</summary>
+        <span class="more-title"><a href="https://www.openstreetmap.org/${e.type}/${
+            e.id
+          }" target="_blank">${e.type} ${e.id}</a></span>
         <table class="osm-data">
         ${renderTags(tags, local)}
         </table>

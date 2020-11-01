@@ -18,3 +18,4 @@ export declare function setHashParams(params: {
     (this: Window, ev: HashChangeEvent): any;
     (this: Window, ev: HashChangeEvent): any;
 }): void;
+export declare function combine(...parts: string[]): string;

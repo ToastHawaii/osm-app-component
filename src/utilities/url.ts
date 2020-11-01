@@ -134,3 +134,16 @@ export function setHashParams(
     window.addEventListener("hashchange", hashChangeEventListener);
   }, 0);
 }
+
+export function combine(...parts: string[]) {
+  return parts
+    .map((part, i) => {
+      if (i === 0) {
+        return part.trim().replace(/[\/]*$/g, "");
+      } else {
+        return part.trim().replace(/(^[\/]*|[\/]*$)/g, "");
+      }
+    })
+    .filter(x => x.length)
+    .join("/");
+}

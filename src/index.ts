@@ -20,7 +20,7 @@ import * as opening_hours from "opening_hours";
 import * as moment from "moment";
 import { Solver } from "./coloriz/Solver";
 import { Color, hexToRgb } from "./coloriz/Color";
-import { setQueryParams, getQueryParams } from "./utilities/url";
+import { setQueryParams, getQueryParams, combine } from "./utilities/url";
 import { Attribute } from "./Generator";
 import { getJson } from "./utilities/jsonRequest";
 import { get, set } from "./utilities/storage";
@@ -97,7 +97,8 @@ export async function initMap<M>(
   globalFilter?: (tags: any) => boolean,
   minZoom = 14
 ) {
-  const existingLocal = await import(/* webpackChunkName: "[request]" */ `./${local.code || "en"}/local`
+  const existingLocal = await import(
+    /* webpackChunkName: "[request]" */ `./${local.code || "en"}/local`
   );
 
   local = mergeDeep(local, existingLocal.local);
@@ -115,9 +116,10 @@ export async function initMap<M>(
     return false;
   });
 
-  (getHtmlElement(".about") as HTMLLinkElement).href = `${baseUrl}${
-    local.code ? `/${local.code}` : ""
-  }/docs/`;
+  (getHtmlElement(".about") as HTMLLinkElement).href = combine(
+    baseUrl,
+    `${local.code ? `${local.code}/` : ""}docs`
+  );
 
   (getHtmlElement(".donate") as HTMLLinkElement).href =
     funding[local.code] || funding.en;

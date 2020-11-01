@@ -151,7 +151,9 @@ export async function initMap<M>(
     const bbox = map.getBounds();
     shareLink(
       `${window.location.origin}${window.location.pathname}?${
-        offers.length > 0 ? `o=${offersToShort(offers, filterOptions)}&` : ``
+        offers.length > 0 && !(filterOptions.length <= 1)
+          ? `o=${offersToShort(offers, filterOptions)}&`
+          : ``
       }b=${toString(bbox.getSouth(), 4)},${toString(
         bbox.getWest(),
         4
@@ -332,7 +334,7 @@ export async function initMap<M>(
       (document.getElementById("osm-search") as HTMLInputElement).value;
 
     setQueryParams({
-      offers: offers.toString(),
+      offers: !(filterOptions.length <= 1) ? offers.toString() : "",
       location: value,
       info: getQueryParams()["info"]
     });
@@ -559,20 +561,21 @@ data-taginfo-taglist-options='{"with_count": true, "lang": "${local.code}"}'>
   }
 
   window.addEventListener("hashchange", () => {
-    hashchange(filterOptions.length === 1);
+    hashchange(filterOptions.length <= 1);
   });
 
   setTimeout(() => {
     if (filterOptions.length > 1) offers = [];
     else offers = filterOptions.map(f => `${f.group}/${f.value}`);
-    hashchange(filterOptions.length === 1);
+    hashchange(filterOptions.length <= 1);
   }, 0);
 
   const params = getQueryParams();
 
   let offersParams: string[] = [];
 
-  if (params["offers"]) offersParams = params["offers"].split(",");
+  if (!(filterOptions.length <= 1) && params["offers"])
+    offersParams = params["offers"].split(",");
 
   if (params["o"]) offersParams = offersfromShort(params["o"], filterOptions);
 
@@ -596,7 +599,7 @@ data-taginfo-taglist-options='{"with_count": true, "lang": "${local.code}"}'>
       ._source;
     const latLng = marker.getLatLng();
     setQueryParams({
-      offers: offers.toString(),
+      offers: !(filterOptions.length <= 1) ? offers.toString() : "",
       location: `${latLng.lat},${latLng.lng}`,
       info: getQueryParams()["info"]
     });
@@ -690,7 +693,8 @@ data-taginfo-taglist-options='{"with_count": true, "lang": "${local.code}"}'>
                 globalFilter
               );
 
-              params["offers"] = offers.toString();
+              if (!(filterOptions.length <= 1))
+                params["offers"] = offers.toString();
             }
 
             showInfoContainer(f);
@@ -765,7 +769,8 @@ data-taginfo-taglist-options='{"with_count": true, "lang": "${local.code}"}'>
             }
 
             const params = getQueryParams();
-            params["offers"] = offers.toString();
+            if (!(filterOptions.length <= 1))
+              params["offers"] = offers.toString();
             setQueryParams(params);
 
             updateCount(local, minZoom);

@@ -540,7 +540,7 @@ a.menu {
 }
 
 .img {
-  max-width: 100%;
+  max-width: 300px;
   max-height: 300px;
   image-orientation: from-image;
 }
@@ -579,13 +579,11 @@ details:not([open]) > *:not(summary) {
 .leaflet-popup .share .title,
 button.menu .title,
 a.menu .title {
-  position: absolute;
-  top: 20px;
+  position: fixed;
   background: white;
   border: 1px solid #333;
   color: #333;
   padding: 4px 6px;
-  left: 0;
   white-space: nowrap;
   user-select: none;
   pointer-events: none;

@@ -60,7 +60,10 @@ document.addEventListener("click", e => {
   for (const target of e.composedPath() as HTMLElement[]) {
     if (target?.classList?.contains("attribut")) {
       const titleElement = createElement("span", target.title, ["title"]);
-
+      titleElement.setAttribute(
+        "style",
+        `top:${target?.offsetTop + 20}px;left:${target?.offsetLeft}px;`
+      );
       target.append(titleElement);
 
       setTimeout(() => {

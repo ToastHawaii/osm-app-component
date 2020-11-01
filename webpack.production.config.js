@@ -11,7 +11,10 @@ module.exports = {
     filename: "index.js",
     library: "osmAppComponent",
     libraryTarget: "umd",
-    chunkFilename: '[id].local.js'
+    chunkFilename: pathData => {
+      const parts = pathData.chunk.name.split("-");
+      return `${parts[0]}/${parts[1]}.js`;
+    }
   },
   plugins: [
     new webpack.DefinePlugin({

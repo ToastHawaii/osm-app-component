@@ -97,7 +97,8 @@ export async function initMap<M>(
   globalFilter?: (tags: any) => boolean,
   minZoom = 14
 ) {
-  const existingLocal = await import(`./${local.code || "en"}/local`);
+  const existingLocal = await import(/* webpackChunkName: "[request]" */ `./${local.code || "en"}/local`
+  );
 
   local = mergeDeep(local, existingLocal.local);
 

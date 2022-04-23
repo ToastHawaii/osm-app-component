@@ -6,7 +6,7 @@ export declare function getRandomInt(min: number, max: number): number;
 /**
  * Simple object check.
  */
-export declare function isObject(item: any): boolean;
+export declare function isObject(item: any): any;
 /**
  * Deep merge two objects.
  */

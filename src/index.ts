@@ -841,7 +841,7 @@ export function parseOpeningHours(
   if (!openingHours) return undefined;
 
   try {
-    return new opening_hours(openingHours, null, {
+    return new (opening_hours as any)(openingHours, null, {
       locale: localCode
     });
   } catch (e) {

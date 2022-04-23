@@ -82,5 +82,5 @@ export function toMapillaryUrl(mapillary: string) {
 
   if (httpRegex.test(mapillary)) return mapillary;
 
-  return `https://d1cuyjsrcm0gby.cloudfront.net/${mapillary}/thumb-320.jpg`;
+  return `https://www.mapillary.com/map/im/${mapillary}`;
 }

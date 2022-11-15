@@ -737,13 +737,13 @@ a.menu .title {
   background-clip: padding-box;
 }
 
-  html.dark-mode {
-    filter: invert(100%) hue-rotate(180deg);
+html.theme-mode-dark {
+  filter: invert(100%) hue-rotate(180deg);
 
-    img,
-    input[type="image"] {
-      filter: invert(100%) hue-rotate(-180deg);
-    }
+  img,
+  input[type="image"] {
+    filter: invert(100%) hue-rotate(-180deg);
+  }
 
   #filters {
     .filter:hover {
@@ -766,36 +766,36 @@ a.menu .title {
   }
 }
 
-.dark-mode {
-  .system-mode-visible {
+.theme-mode-dark {
+  .theme-mode-system-visible {
     display: none;
   }
-  .dark-mode-visible {
+  .theme-mode-dark-visible {
     display: block;
   }
-  .light-mode-visible {
+  .theme-mode-light-visible {
     display: none;
   }
 }
 
-.system-mode-visible {
+.theme-mode-system-visible {
   display: none;
 }
-.dark-mode-visible {
+.theme-mode-dark-visible {
   display: none;
 }
-.light-mode-visible {
+.theme-mode-light-visible {
   display: block;
 }
 
-.system-mode {  
-  .system-mode-visible {
+.theme-mode-system {  
+  .theme-mode-system-visible {
     display: block;
   }
-  .dark-mode-visible {
+  .theme-mode-dark-visible {
     display: none;
   }
-  .light-mode-visible {
+  .theme-mode-light-visible {
     display: none;
   }
 }

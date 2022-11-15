@@ -181,15 +181,15 @@ export async function initMap<M>(
     ).matches;
 
     if ((theme === "system" && isSystemThemeDark) || theme === "dark") {
-      document.body.classList.add("dark-mode");
+      document.documentElement.classList.add("theme-mode-dark");
     } else {
-      document.body.classList.remove("dark-mode");
+      document.documentElement.classList.remove("theme-mode-dark");
     }
 
     if (theme === "system") {
-      document.body.classList.add("system-mode");
+      document.documentElement.classList.add("theme-mode-system");
     } else {
-      document.body.classList.remove("system-mode");
+      document.documentElement.classList.remove("theme-mode-system");
     }
   }
 
@@ -220,6 +220,7 @@ export async function initMap<M>(
       }
     }
 
+    localStorage.setItem("theme", theme);
     setThemeClass(theme);
   });
 

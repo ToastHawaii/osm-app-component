@@ -195,33 +195,35 @@ export async function initMap<M>(
 
   setThemeClass(startTheme);
 
-  getHtmlElement(".theme").addEventListener("click", () => {
-    let theme = localStorage.getItem("theme") || "system";
+  getHtmlElements(".theme").forEach((e) => {
+    e.addEventListener("click", () => {
+      let theme = localStorage.getItem("theme") || "system";
 
-    const isSystemThemeDark = window.matchMedia(
-      "(prefers-color-scheme: dark)"
-    ).matches;
+      const isSystemThemeDark = window.matchMedia(
+        "(prefers-color-scheme: dark)"
+      ).matches;
 
-    if (isSystemThemeDark) {
-      if (theme === "system") {
-        theme = "light";
-      } else if (theme === "light") {
-        theme = "dark";
-      } else if (theme === "dark") {
-        theme = "system";
+      if (isSystemThemeDark) {
+        if (theme === "system") {
+          theme = "light";
+        } else if (theme === "light") {
+          theme = "dark";
+        } else if (theme === "dark") {
+          theme = "system";
+        }
+      } else {
+        if (theme === "system") {
+          theme = "dark";
+        } else if (theme === "dark") {
+          theme = "light";
+        } else if (theme === "light") {
+          theme = "system";
+        }
       }
-    } else {
-      if (theme === "system") {
-        theme = "dark";
-      } else if (theme === "dark") {
-        theme = "light";
-      } else if (theme === "light") {
-        theme = "system";
-      }
-    }
 
-    localStorage.setItem("theme", theme);
-    setThemeClass(theme);
+      localStorage.setItem("theme", theme);
+      setThemeClass(theme);
+    });
   });
 
   getHtmlElement(".note").addEventListener("click", () => {

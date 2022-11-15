@@ -443,11 +443,14 @@ a.menu {
     bottom: 95px;
     z-index: 1001;
   }
-  &.edit {
+  &.theme {
     bottom: 130px;
   }
-  &.note {
+  &.edit {
     bottom: 165px;
+  }
+  &.note {
+    bottom: 200px;
   }
 
   i {
@@ -734,15 +737,13 @@ a.menu .title {
   background-clip: padding-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
+  html.dark-mode {
     filter: invert(100%) hue-rotate(180deg);
 
     img,
     input[type="image"] {
       filter: invert(100%) hue-rotate(-180deg);
     }
-  }
 
   #filters {
     .filter:hover {
@@ -762,5 +763,39 @@ a.menu .title {
     .filter-sub:hover {
       background-color: rgb(211, 211, 211);
     }
+  }
+}
+
+.dark-mode {
+  .system-mode-visible {
+    display: none;
+  }
+  .dark-mode-visible {
+    display: block;
+  }
+  .light-mode-visible {
+    display: none;
+  }
+}
+
+.system-mode-visible {
+  display: none;
+}
+.dark-mode-visible {
+  display: none;
+}
+.light-mode-visible {
+  display: block;
+}
+
+.system-mode {  
+  .system-mode-visible {
+    display: block;
+  }
+  .dark-mode-visible {
+    display: none;
+  }
+  .light-mode-visible {
+    display: none;
   }
 }

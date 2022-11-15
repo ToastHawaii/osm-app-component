@@ -29,7 +29,7 @@ import { toString } from "./utilities/string";
 import {
   getHtmlElement,
   getHtmlElements,
-  createElement
+  createElement,
 } from "./utilities/html";
 import { createOverPassLayer, isIOS, shareLink } from "./createOverPassLayer";
 
@@ -50,10 +50,10 @@ delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: icon2x,
   iconUrl: icon,
-  shadowUrl: iconShadow
+  shadowUrl: iconShadow,
 });
 
-document.addEventListener("click", e => {
+document.addEventListener("click", (e) => {
   const titleElement = document.querySelector(".attribut .title");
   if (titleElement) titleElement.remove();
 
@@ -73,7 +73,7 @@ document.addEventListener("click", e => {
   }
 });
 
-document.addEventListener("click", async e => {
+document.addEventListener("click", async (e) => {
   for (const target of e.composedPath() as HTMLElement[]) {
     if (target?.tagName?.toUpperCase() === "DETAILS") {
       await delay(0);
@@ -125,7 +125,7 @@ export async function initMap<M>(
 
   local = mergeDeep(local, existingLocal.local);
 
-  getHtmlElement(".search").addEventListener("submit", ev => {
+  getHtmlElement(".search").addEventListener("submit", (ev) => {
     ev.preventDefault();
     search();
     return false;
@@ -147,7 +147,7 @@ export async function initMap<M>(
     funding[local.code] || funding.en;
 
   const shareButton = getHtmlElement(".share");
-  shareButton.addEventListener("click", e => {
+  shareButton.addEventListener("click", (e) => {
     e.preventDefault();
 
     const info = getQueryParams()["info"];
@@ -170,6 +170,59 @@ export async function initMap<M>(
     );
   });
 
+  const startTheme = localStorage.getItem("theme") || "system";
+  if (!startTheme) {
+    localStorage.setItem("theme", startTheme);
+  }
+
+  function setThemeClass(theme: string) {
+    const isSystemThemeDark = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
+
+    if ((theme === "system" && isSystemThemeDark) || theme === "dark") {
+      document.body.classList.add("dark-mode");
+    } else {
+      document.body.classList.remove("dark-mode");
+    }
+
+    if (theme === "system") {
+      document.body.classList.add("system-mode");
+    } else {
+      document.body.classList.remove("system-mode");
+    }
+  }
+
+  setThemeClass(startTheme);
+
+  getHtmlElement(".theme").addEventListener("click", () => {
+    let theme = localStorage.getItem("theme") || "system";
+
+    const isSystemThemeDark = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
+
+    if (isSystemThemeDark) {
+      if (theme === "system") {
+        theme = "light";
+      } else if (theme === "light") {
+        theme = "dark";
+      } else if (theme === "dark") {
+        theme = "system";
+      }
+    } else {
+      if (theme === "system") {
+        theme = "dark";
+      } else if (theme === "dark") {
+        theme = "light";
+      } else if (theme === "light") {
+        theme = "system";
+      }
+    }
+
+    setThemeClass(theme);
+  });
+
   getHtmlElement(".note").addEventListener("click", () => {
     const latlng = map.getCenter();
     const zoom = map.getZoom();
@@ -184,9 +237,9 @@ export async function initMap<M>(
     let presets = "";
     for (const o of offers) {
       const p = filterOptions
-        .filter(f => `${f.group}/${f.value}` === o)
-        .map(o => o.edit.map(t => t.replace(/=/gi, "/")).join(","))
-        .filter(o => o)
+        .filter((f) => `${f.group}/${f.value}` === o)
+        .map((o) => o.edit.map((t) => t.replace(/=/gi, "/")).join(","))
+        .filter((o) => o)
         .join(",");
       presets += (presets && p ? "," : "") + p;
     }
@@ -203,14 +256,14 @@ export async function initMap<M>(
 
   const attribution = [
     'Map data &copy; <a href="https://openstreetmap.org/">OpenStreetMap</a> contributors',
-    'POI via <a href="https://www.overpass-api.de/">Overpass API</a>'
+    'POI via <a href="https://www.overpass-api.de/">Overpass API</a>',
   ];
 
   const osm = new L.TileLayer(
     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     {
       opacity: 0.7,
-      attribution: attribution.join(" | ")
+      attribution: attribution.join(" | "),
     }
   );
 
@@ -219,7 +272,7 @@ export async function initMap<M>(
   const state = get<State>("position") || {
     lat: 47.37,
     lng: 8.54,
-    zoom: minZoom
+    zoom: minZoom,
   };
 
   map = new L.Map("map")
@@ -274,7 +327,7 @@ export async function initMap<M>(
 
       const c = (e.getAttribute("part-area-visible") || "")
         .split(",")
-        .map(n => parseFloat(n));
+        .map((n) => parseFloat(n));
 
       (e.previousElementSibling as HTMLElement).style.display = "none";
 
@@ -303,10 +356,10 @@ export async function initMap<M>(
     const hiddens = getHtmlElements(`.part-area-hidden`);
     if (visibles.length === hiddens.length) {
       getHtmlElements(".external-label").forEach(
-        l => (l.style.display = "none")
+        (l) => (l.style.display = "none")
       );
     } else {
-      getHtmlElements(".external-label").forEach(l => (l.style.display = ""));
+      getHtmlElements(".external-label").forEach((l) => (l.style.display = ""));
     }
   }
 
@@ -339,19 +392,19 @@ export async function initMap<M>(
     setQueryParams({
       offers: !(filterOptions.length <= 1) ? offers.toString() : "",
       location: value,
-      info: getQueryParams()["info"]
+      info: getQueryParams()["info"],
     });
 
     getJson("https://nominatim.openstreetmap.org/search", {
       format: "json",
       q: value,
-      limit: 1
-    }).then(r => {
+      limit: 1,
+    }).then((r) => {
       const result = r[0];
       if (!result) return;
       map.flyToBounds([
         [result.boundingbox[0], result.boundingbox[2]],
-        [result.boundingbox[1], result.boundingbox[3]]
+        [result.boundingbox[1], result.boundingbox[3]],
       ]);
     });
   }
@@ -385,9 +438,11 @@ export async function initMap<M>(
                 globalFilter
               );
 
-              (getHtmlElement(
-                `#filters input[value='${f.group + "/" + f.value}']`
-              ) as HTMLInputElement).checked = true;
+              (
+                getHtmlElement(
+                  `#filters input[value='${f.group + "/" + f.value}']`
+                ) as HTMLInputElement
+              ).checked = true;
 
               if (params["info"] === f.group + "/" + f.value)
                 showInfoContainer(f);
@@ -411,10 +466,10 @@ export async function initMap<M>(
 
     if (params["location"]) search(params["location"]);
     else if (params["b"]) {
-      const bounds = params["b"].split(",").map(b => parseFloat(b));
+      const bounds = params["b"].split(",").map((b) => parseFloat(b));
       map.fitBounds([
         [bounds[0], bounds[1]],
-        [bounds[2], bounds[3]]
+        [bounds[2], bounds[3]],
       ]);
     }
   }
@@ -427,10 +482,9 @@ export async function initMap<M>(
     infoContainer.style.display = "block";
     getHtmlElement(".info h4", infoContainer).innerText =
       local.type[f.value].name;
-    (getHtmlElement(
-      ".info .link",
-      infoContainer
-    ) as HTMLAnchorElement).href = `http://overpass-turbo.eu/?Q=${encodeURI(
+    (
+      getHtmlElement(".info .link", infoContainer) as HTMLAnchorElement
+    ).href = `http://overpass-turbo.eu/?Q=${encodeURI(
       `[out:json][timeout:30][bbox:{{bbox}}];
 (
 ${f.query.trim()}
@@ -484,8 +538,8 @@ data-taginfo-taglist-options='{"with_count": true, "lang": "${local.code}"}'>
           props: "descriptions",
           origin: "*",
           sites: "wiki",
-          titles: [tags.join("|"), keys.join("|")].filter(t => t).join("|")
-        }).then(r => {
+          titles: [tags.join("|"), keys.join("|")].filter((t) => t).join("|"),
+        }).then((r) => {
           if (r && r.error) return;
 
           let description = "";
@@ -569,7 +623,7 @@ data-taginfo-taglist-options='{"with_count": true, "lang": "${local.code}"}'>
 
   setTimeout(() => {
     if (filterOptions.length > 1) offers = [];
-    else offers = filterOptions.map(f => `${f.group}/${f.value}`);
+    else offers = filterOptions.map((f) => `${f.group}/${f.value}`);
     hashchange(filterOptions.length <= 1);
   }, 0);
 
@@ -590,21 +644,21 @@ data-taginfo-taglist-options='{"with_count": true, "lang": "${local.code}"}'>
   if (params["location"]) {
     search(params["location"]);
   } else if (params["b"]) {
-    const bounds = params["b"].split(",").map(b => parseFloat(b));
+    const bounds = params["b"].split(",").map((b) => parseFloat(b));
     map.fitBounds([
       [bounds[0], bounds[1]],
-      [bounds[2], bounds[3]]
+      [bounds[2], bounds[3]],
     ]);
   } else map.locate({ setView: true, maxZoom: 16 });
 
-  map.on("popupopen", e => {
+  map.on("popupopen", (e) => {
     const marker = (e as L.PopupEvent & { popup: { _source: L.Marker } }).popup
       ._source;
     const latLng = marker.getLatLng();
     setQueryParams({
       offers: !(filterOptions.length <= 1) ? offers.toString() : "",
       location: `${latLng.lat},${latLng.lng}`,
-      info: getQueryParams()["info"]
+      info: getQueryParams()["info"],
     });
   });
 
@@ -673,7 +727,7 @@ data-taginfo-taglist-options='{"with_count": true, "lang": "${local.code}"}'>
           aElement.href = `?offers=${k + "/" + f.value}&info=${
             k + "/" + f.value
           }`;
-          aElement.addEventListener("click", ev => {
+          aElement.addEventListener("click", (ev) => {
             ev.preventDefault();
 
             const params = getQueryParams();
@@ -842,7 +896,7 @@ export function parseOpeningHours(
 
   try {
     return new (opening_hours as any)(openingHours, null, {
-      locale: localCode
+      locale: localCode,
     });
   } catch (e) {
     console.warn(e);
@@ -876,7 +930,7 @@ export function updateCount(local: any, minZoom: number) {
 function countMarkersInView(map: L.Map) {
   let count = 0;
   const mapBounds = map.getBounds();
-  map.eachLayer(layer => {
+  map.eachLayer((layer) => {
     if (layer instanceof L.Marker) {
       if (mapBounds.contains(layer.getLatLng())) {
         count++;
@@ -894,7 +948,7 @@ function offersToShort(
     value: string;
   }[]
 ) {
-  const max = Math.max(...filters.map(f => f.id));
+  const max = Math.max(...filters.map((f) => f.id));
 
   let result = "0";
   for (let i = 0; i < max; i++) {
@@ -902,7 +956,8 @@ function offersToShort(
   }
 
   for (const o of value) {
-    const pos = max - filters.filter(f => o === f.group + "/" + f.value)[0].id;
+    const pos =
+      max - filters.filter((f) => o === f.group + "/" + f.value)[0].id;
     result = result.slice(0, pos) + "1" + result.slice(pos + 1, result.length);
   }
 
@@ -924,7 +979,7 @@ function offersfromShort(
   let id = v.length - 1;
   for (const o of v) {
     if (o === "1") {
-      const filter = filters.filter(f => f.id === id)[0];
+      const filter = filters.filter((f) => f.id === id)[0];
       offers.push(filter.group + "/" + filter.value);
     }
     id--;
@@ -941,7 +996,7 @@ setInterval(async () => {
 
   if (!map) return;
   const mapBounds = map.getBounds();
-  map.eachLayer(layer => {
+  map.eachLayer((layer) => {
     if (layer instanceof L.Marker) {
       if (mapBounds.contains(layer.getLatLng())) {
         markers.push((layer as L.Marker).getElement() as HTMLElement);

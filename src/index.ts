@@ -131,9 +131,14 @@ export async function initMap<M>(
     return false;
   });
 
+  let watchLocation = false;
   getHtmlElement(".geo").addEventListener("click", () => {
-    map.stopLocate();
-    map.locate({ setView: true, maxZoom: 16 });
+    watchLocation = !watchLocation;
+    if (watchLocation) {
+      map.locate({ setView: true, maxZoom: 16, watch: true });
+    } else {
+      map.stopLocate();
+    }
 
     return false;
   });
@@ -382,8 +387,6 @@ export async function initMap<M>(
       currentPosition = L.marker(e.latlng).addTo(map);
 
       currentAccuracy = L.circle(e.latlng, radius).addTo(map);
-
-      map.locate({ watch: false, maxZoom: 16 });
     }
   );
 
@@ -652,7 +655,7 @@ data-taginfo-taglist-options='{"with_count": true, "lang": "${local.code}"}'>
       [bounds[0], bounds[1]],
       [bounds[2], bounds[3]],
     ]);
-  } else map.locate({ setView: true, maxZoom: 16 });
+  }
 
   map.on("popupopen", (e) => {
     const marker = (e as L.PopupEvent & { popup: { _source: L.Marker } }).popup

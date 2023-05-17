@@ -387,6 +387,8 @@ export async function initMap<M>(
       currentPosition = L.marker(e.latlng).addTo(map);
 
       currentAccuracy = L.circle(e.latlng, radius).addTo(map);
+
+      map.locate({ watch: true, setView: false });
     }
   );
 

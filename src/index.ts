@@ -495,11 +495,11 @@ export async function initMap<M>(
     ).href = `http://overpass-turbo.eu/?Q=${encodeURI(
       `[out:json][timeout:30][bbox:{{bbox}}];
 (
-${f.query.trim()}
+${overpassSubs(f.query).trim()}
 );
 out center;`
     )}`;
-    getHtmlElement(".info .query", infoContainer).innerText = f.query.trim();
+    getHtmlElement(".info .query", infoContainer).innerText = overpassSubs(f.query).trim();
 
     const wikiElement = getHtmlElement(".info .wiki", infoContainer);
 

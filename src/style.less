@@ -418,6 +418,10 @@ summary {
   display: block;
 }
 
+.menu-group.collapsed {
+  display: none;
+}
+
 button.menu,
 a.menu {
   right: 10px;
@@ -433,24 +437,27 @@ a.menu {
   text-align: center;
   z-index: 1000;
 
-  &.donate {
+  &.toggle {
     bottom: 25px;
   }
-  &.about {
+  &.donate {
     bottom: 60px;
   }
-  &.theme {
+  &.about {
     bottom: 95px;
   }
-  &.share {
+  &.theme {
     bottom: 130px;
+  }
+  &.share {
+    bottom: 165px;
     z-index: 1001;
   }
   &.edit {
-    bottom: 165px;
+    bottom: 200px;
   }
   &.note {
-    bottom: 200px;
+    bottom: 235px;
   }
 
   i {

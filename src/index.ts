@@ -143,6 +143,10 @@ export async function initMap<M>(
     return false;
   });
 
+  getHtmlElement(".toggle").addEventListener("click", () => {
+    getHtmlElement(".menu-group").classList.toggle("collapsed");
+  });
+
   (getHtmlElement(".about") as HTMLLinkElement).href = combine(
     baseUrl,
     `${local.code ? `${local.code}/` : ""}docs`
@@ -499,7 +503,9 @@ ${overpassSubs(f.query).trim()}
 );
 out center;`
     )}`;
-    getHtmlElement(".info .query", infoContainer).innerText = overpassSubs(f.query).trim();
+    getHtmlElement(".info .query", infoContainer).innerText = overpassSubs(
+      f.query
+    ).trim();
 
     const wikiElement = getHtmlElement(".info .wiki", infoContainer);
 

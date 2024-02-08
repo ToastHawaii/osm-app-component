@@ -272,7 +272,7 @@ export async function initMap<M>(
   ];
 
   const osm = new L.TileLayer(
-    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
     {
       opacity: 0.7,
       attribution: attribution.join(" | "),

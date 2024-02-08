@@ -21,7 +21,7 @@
   "types": "dist/index.d.ts",
   "dependencies": {
     "@babel/runtime": "7.17.9",
-    "@types/leaflet": "1.5.19",
+    "@types/leaflet": "1.9.8",
     "@types/md5": "2.2.1",
     "bignumber.js": "9.0.2",
     "details-element-polyfill": "2.4.0",

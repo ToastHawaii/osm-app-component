@@ -151,9 +151,6 @@ export function createOverPassLayer<M>(
             model
           )}</strong>
         <div class="adr">
-
-        ${attributesGenerator.render(local, tags, value, {} as M)}
-
          <div class="street-address">${model.address.street} ${
             model.address.houseNumber
           } ${toLevel(parseFloat(model.address.level), local)}</div>
@@ -173,18 +170,6 @@ export function createOverPassLayer<M>(
         ${
           model.conditionalFee ? `<br><div>${local.conditionalFee}</div>` : ``
         } <br/>
-        <div class="actions">
-         <small>
-         <a href="https://maps.apple.com/?${utilQsString({
-           ll: `${model.address.latitude},${model.address.longitude}`,
-           q: toTitle(model),
-         })}"><i class="far fa-compass"></i>
-           ${local.route}
-         </a>
-         <a href="" class="share button"><i class="fas fa-share-alt"></i> ${local.share}</a>
-         <a href="${href}" class="edit button"><i class="fas fa-pencil-alt"></i> ${local.edit}</a>
-         </small>
-        </div>
         <div class="img-container" style="clear: both;">
         ${
           model.img || model.wikipedia.image
@@ -199,6 +184,7 @@ export function createOverPassLayer<M>(
         <div class="description">
         ${generateHtmlDescription(model)}
         </div>
+        ${attributesGenerator.render(local, tags, value, {} as M)}
         <div>
           ${
             !attributDescriptionGenerator.empty(tags, value, {}, local)
@@ -234,6 +220,18 @@ export function createOverPassLayer<M>(
         ${renderTags(tags, local)}
         </table>
         </details>
+        <div class="actions">
+         <small>
+         <a href="https://maps.apple.com/?${utilQsString({
+           ll: `${model.address.latitude},${model.address.longitude}`,
+           q: toTitle(model),
+         })}"><i class="far fa-compass"></i>
+           ${local.route}
+         </a>
+         <a href="" class="share button"><i class="fas fa-share-alt"></i> ${local.share}</a>
+         <a href="${href}" class="edit button"><i class="fas fa-pencil-alt"></i> ${local.edit}</a>
+         </small>
+        </div>
         </div>`
         );
 

@@ -18,6 +18,9 @@
 export const local = {
   code: "",
 
+  route: "Route",
+  share: "Share",
+  edit: "Edit",
   documentation: "Documentation",
 
   floor: (level: number) => `(${level}F)`,
@@ -29,14 +32,14 @@ export const local = {
   },
   amenity: {
     hunting_stand: "Hunting stand",
-    give_box: "GiveBox"
+    give_box: "GiveBox",
   },
   shop: {
-    books: "Buchhandlung"
+    books: "Buchhandlung",
   },
   leisure: {
     bird_hide: "Place to observe birds",
-    wildlife_hide: "Place to observe wildlife"
+    wildlife_hide: "Place to observe wildlife",
   },
   man_made: {
     water_well: "Water well",
@@ -47,14 +50,14 @@ export const local = {
     tower: "Tower",
     beehive: "Beehive",
     insect_hotel: "Insect hotel",
-    nesting_site: "Nesting aid"
+    nesting_site: "Nesting aid",
   },
   landuse: {
-    apiary: "Beehive"
+    apiary: "Beehive",
   },
   natural: {
     anthill: "Anthill",
-    termite_mound: "Termite mound"
+    termite_mound: "Termite mound",
   },
   sport: { bowls: "Bowls", boules: "Boules" },
   boules: {
@@ -62,7 +65,7 @@ export const local = {
     lyonnaise: "Jeu provençal",
     boule_de_fort: "Boule de fort",
     pétanque: "Pétanque",
-    bocce: "Bocce"
+    bocce: "Bocce",
   },
   "piste:difficulty": {
     novice: "Novice",
@@ -71,7 +74,7 @@ export const local = {
     advanced: "Advanced",
     expert: "Expert",
     freeride: "Freeride",
-    extreme: "Extreme"
+    extreme: "Extreme",
   },
   fitness_station: {
     balance_beam: "Exercise Balance Beam",
@@ -90,7 +93,7 @@ export const local = {
     bench: "Bench",
     body_raise: "Body raise",
     slalom: "Slalom",
-    stretch_bars: "Stretch bars"
+    stretch_bars: "Stretch bars",
   },
   historic: {
     aircraft: "Aircraft",
@@ -128,7 +131,7 @@ export const local = {
     tree_shrine: "Tree shrine",
     wayside_cross: "Wayside cross",
     wayside_shrine: "Wayside shrine",
-    wreck: "Wreck"
+    wreck: "Wreck",
   },
   site_type: {
     megalith: "Megalith",
@@ -143,7 +146,7 @@ export const local = {
     roman_villa: "Roman villa",
     domus: "Domus",
     roman_circus: "Roman circus",
-    necropolis: "Necropolis"
+    necropolis: "Necropolis",
   },
   castle_type: {
     defensive: "Defensive castle",
@@ -154,13 +157,13 @@ export const local = {
     castrum: "Roman fort ",
     shiro: "Shiro",
     kremlin: "Kremlin",
-    hillfort: "Hillfort"
+    hillfort: "Hillfort",
   },
   "garden:type": {
     botanical: "Botanical garden",
     community: "Community garden",
     residential: "Residential garden",
-    roof_garden: "Roof garden"
+    roof_garden: "Roof garden",
   },
   "garden:style": {
     english: "English landscape garden",
@@ -175,7 +178,7 @@ export const local = {
     kitchen: "Kitchen garden",
     flower_garden: "Flower garden",
     cottage_garden: "Cottage garden",
-    walled_garden: "Walled garden"
+    walled_garden: "Walled garden",
   },
   "public_bookcase:type": {
     building: "Public bookcase",
@@ -187,7 +190,7 @@ export const local = {
     sculpture: "Public bookcase",
     shelf: "Public bookcase",
     shelter: "Public bookcase",
-    wooden_cabinet: "Public bookcase"
+    wooden_cabinet: "Public bookcase",
   },
   seasonal: {
     yes: "Seasonal",
@@ -197,6 +200,6 @@ export const local = {
     autumn: "During autumn",
     winter: "During winter",
     wet_season: "During wet season",
-    dry_season: "During dry season"
-  }
+    dry_season: "During dry season",
+  },
 };

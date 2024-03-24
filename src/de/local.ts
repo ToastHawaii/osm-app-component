@@ -18,6 +18,9 @@
 export const local = {
   code: "de",
 
+  route: "Routen",
+  share: "Teilen",
+  edit: "Bearbeiten",
   documentation: "Dokumentation",
 
   floor: function (level: number) {

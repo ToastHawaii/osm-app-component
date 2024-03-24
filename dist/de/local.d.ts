@@ -1,5 +1,8 @@
 export declare const local: {
     code: string;
+    route: string;
+    share: string;
+    edit: string;
     documentation: string;
     floor: (level: number) => string;
     groundFloor: (_level: number) => string;

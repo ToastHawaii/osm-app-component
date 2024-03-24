@@ -267,8 +267,8 @@ export async function initMap<M>(
   moment.locale(local.code || "en");
 
   const attribution = [
-    'Map data &copy; <a href="https://openstreetmap.org/">OpenStreetMap</a> contributors',
-    'POI via <a href="https://www.overpass-api.de/">Overpass API</a>',
+    'Map data &copy; <a href="https://openstreetmap.org/">OpenStreetMap</a>',
+    'POI via <a href="https://www.overpass-api.de/">Overpass</a>',
   ];
 
   const osm = new L.TileLayer(

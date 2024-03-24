@@ -30,7 +30,7 @@ import {
   extractOperator,
   extractImage,
   extractLocality,
-  extractStreet
+  extractStreet,
 } from "./data";
 import { textTruncate } from "./utilities/string";
 import "leaflet-overpass-layer";
@@ -58,13 +58,13 @@ export function createOverPassLayer<M>(
       };" class="marker-pin"></div><div class="marker-icon ${value}-icon" style="background-image:url('${icon}');"></div>`,
 
       iconSize: [36, 48],
-      iconAnchor: [18, 48]
+      iconAnchor: [18, 48],
     }),
     minZoomIndicatorEnabled: true,
     minZoomIndicatorOptions: {
       position: "bottomleft",
       minZoomMessageNoLayer: local.minZoomMessageNoLayer,
-      minZoomMessage: local.minZoomMessage
+      minZoomMessage: local.minZoomMessage,
     },
     minZoom: minZoom,
     query: `(${overpassSubs(query)});out center;`,
@@ -99,7 +99,7 @@ export function createOverPassLayer<M>(
           marker = L.circle(pos, 20, {
             stroke: false,
             fillColor: "#E54041",
-            fillOpacity: 0.9
+            fillOpacity: 0.9,
           });
         }
         const model = {
@@ -114,7 +114,7 @@ export function createOverPassLayer<M>(
             houseNumber: tags["addr:housenumber"] || "",
             level: tags["level"] || "",
             latitude: pos.lat,
-            longitude: pos.lng
+            longitude: pos.lng,
           },
           opening:
             parseOpeningHours(tags.service_times, local.code || "en") ||
@@ -127,7 +127,7 @@ export function createOverPassLayer<M>(
           img: "",
           description: "",
           wikimediaDescription: "",
-          wikipedia: { summary: "", url: "", image: "" }
+          wikipedia: { summary: "", url: "", image: "" },
         };
         model.img = model.img || extractImage(tags) || "";
         model.description =
@@ -147,8 +147,6 @@ export function createOverPassLayer<M>(
         const contentElement = createElement(
           "div",
           `<div id="hcard-Name" class="vcard">
-          <a href="${href}" class="edit button"><i class="fas fa-pencil-alt"></i></a>
-          <a href="" class="share button"><i class="fas fa-share-alt"></i></a>
           <strong class="name" title="${toTitle(model)}">${toTitle(
             model
           )}</strong>
@@ -175,14 +173,16 @@ export function createOverPassLayer<M>(
         ${
           model.conditionalFee ? `<br><div>${local.conditionalFee}</div>` : ``
         } <br/>
-        <div class="geo">
+        <div class="actions">
          <small>
          <a href="https://maps.apple.com/?${utilQsString({
            ll: `${model.address.latitude},${model.address.longitude}`,
-           q: toTitle(model)
+           q: toTitle(model),
          })}"><i class="far fa-compass"></i>
            ${local.route}
          </a>
+         <a href="" class="share button"><i class="fas fa-share-alt"></i> ${local.share}</a>
+         <a href="${href}" class="edit button"><i class="fas fa-pencil-alt"></i> ${local.edit}</a>
          </small>
         </div>
         <div class="img-container" style="clear: both;">
@@ -227,9 +227,9 @@ export function createOverPassLayer<M>(
         </div>
         <details class="more">
         <summary>${local.documentation}</summary>
-        <span class="more-title"><a href="https://www.openstreetmap.org/${e.type}/${
-            e.id
-          }" target="_blank">${e.type} ${e.id}</a></span>
+        <span class="more-title"><a href="https://www.openstreetmap.org/${
+          e.type
+        }/${e.id}" target="_blank">${e.type} ${e.id}</a></span>
         <table class="osm-data">
         ${renderTags(tags, local)}
         </table>
@@ -258,7 +258,7 @@ export function createOverPassLayer<M>(
         const popup = L.popup({
           minWidth: 200,
           autoPanPaddingTopLeft: [10, 85],
-          autoPanPaddingBottomRight: [10, 10]
+          autoPanPaddingBottomRight: [10, 10],
         }).setContent(() => {
           if (!isLoaded) {
             isLoaded = true;
@@ -273,8 +273,8 @@ export function createOverPassLayer<M>(
                 addressdetails: "1",
                 namedetails: "1",
                 lat: pos.lat,
-                lon: pos.lng
-              }).then(result => {
+                lon: pos.lng,
+              }).then((result) => {
                 model.address.name = extractName(
                   result.namedetails,
                   local.code || "en"
@@ -322,8 +322,8 @@ export function createOverPassLayer<M>(
                   sitefilter: (local.code || "en") + "wiki",
                   languages: local.code || "en",
                   languagefallback: "0",
-                  origin: "*"
-                }).then(async r => {
+                  origin: "*",
+                }).then(async (r) => {
                   if (r && r.error) return;
                   if (!r.entities[qid]) return;
                   const entity = r.entities[qid];
@@ -351,7 +351,7 @@ export function createOverPassLayer<M>(
                     };
                   } = {
                     title: label,
-                    description: description
+                    description: description,
                   };
                   // add image
                   if (entity.claims) {
@@ -368,7 +368,7 @@ export function createOverPassLayer<M>(
                         if (image) {
                           result.imageURL = `${imageroot}?${utilQsString({
                             title: "Special:Redirect/file/" + image,
-                            width: 300
+                            width: 300,
                           })}`;
                         }
                         break;
@@ -385,10 +385,10 @@ export function createOverPassLayer<M>(
                       }.wikipedia.org/wiki/${title.replace(/ /g, "_")}`;
                       result.wiki = {
                         title: title,
-                        url: url
+                        url: url,
                       };
                       loadWikipediaSummary(title, local.code || "en").then(
-                        wikipedia => {
+                        (wikipedia) => {
                           model.wikipedia = wikipedia;
 
                           getHtmlElement(
@@ -407,47 +407,41 @@ export function createOverPassLayer<M>(
                   model.wikimediaDescription = result.description;
                   model.img =
                     model.img || model.wikipedia.image || result.imageURL || "";
-                  getHtmlElement(".name", contentElement).innerHTML = toTitle(
-                    model
-                  );
-                  getHtmlElement(".name", contentElement).title = toTitle(
-                    model
-                  );
-                  getHtmlElement(
-                    ".description",
-                    contentElement
-                  ).innerHTML = generateHtmlDescription(model);
+                  getHtmlElement(".name", contentElement).innerHTML =
+                    toTitle(model);
+                  getHtmlElement(".name", contentElement).title =
+                    toTitle(model);
+                  getHtmlElement(".description", contentElement).innerHTML =
+                    generateHtmlDescription(model);
                   getHtmlElement(".img-container", contentElement).innerHTML =
                     model.img || model.wikipedia.image
                       ? `<br /><img class="img" src="${
                           model.img || model.wikipedia.image
                         }"/>`
                       : ``;
-                  getHtmlElement(
-                    ".contact",
-                    contentElement
-                  ).innerHTML = !linksGenerator.empty(
-                    tags,
-                    value,
-                    {
-                      website: model.wikipedia.url
-                        ? model.wikipedia.url
-                        : result.wiki
-                        ? result.wiki.url
-                        : undefined
-                    },
-                    local
-                  )
-                    ? `
+                  getHtmlElement(".contact", contentElement).innerHTML =
+                    !linksGenerator.empty(
+                      tags,
+                      value,
+                      {
+                        website: model.wikipedia.url
+                          ? model.wikipedia.url
+                          : result.wiki
+                          ? result.wiki.url
+                          : undefined,
+                      },
+                      local
+                    )
+                      ? `
     <br />
     ${linksGenerator.render(local, tags, value, {
       website: model.wikipedia.url
         ? model.wikipedia.url
         : result.wiki
         ? result.wiki.url
-        : undefined
+        : undefined,
     })}`
-                    : ``;
+                      : ``;
 
                   popup.update();
                   if (model.img || model.wikipedia.image) {
@@ -474,13 +468,11 @@ export function createOverPassLayer<M>(
                 tags["operator:wikipedia"];
               if (wikipediaUrl)
                 loadWikipediaSummary(wikipediaUrl, local.code || "en").then(
-                  wikipedia => {
+                  (wikipedia) => {
                     model.wikipedia = wikipedia;
 
-                    getHtmlElement(
-                      ".description",
-                      contentElement
-                    ).innerHTML = generateHtmlDescription(model);
+                    getHtmlElement(".description", contentElement).innerHTML =
+                      generateHtmlDescription(model);
                     popup.update();
                   }
                 );
@@ -506,7 +498,7 @@ export function createOverPassLayer<M>(
         this._markers?.addLayer(marker);
       }
       updateCount(local, minZoom);
-    }
+    },
   });
 }
 
@@ -550,7 +542,7 @@ export async function shareLink(
   const data = {
     url: url,
     title: title,
-    text: description
+    text: description,
   };
   if (
     (navigator as any).share &&
@@ -598,7 +590,7 @@ async function loadWikipediaSummary(siteTitle: string, language: string) {
     explaintext: "",
     redirects: "1",
     titles: cleanSiteTitle,
-    origin: "*"
+    origin: "*",
   });
   const pages = data.query.pages;
   const keys = Object.keys(pages);
@@ -607,7 +599,7 @@ async function loadWikipediaSummary(siteTitle: string, language: string) {
     return {
       url: firstPage.fullurl,
       summary: textTruncate(firstPage.extract || "", 500),
-      image: firstPage.thumbnail && firstPage.thumbnail.source
+      image: firstPage.thumbnail && firstPage.thumbnail.source,
     };
   } else {
     throw new Error("No summary found");
@@ -695,7 +687,7 @@ export function isIOS() {
       "iPod Simulator",
       "iPad",
       "iPhone",
-      "iPod"
+      "iPod",
     ].includes(navigator.platform) ||
     // iPad on iOS 13 detection
     (navigator.userAgent.includes("Mac") && "ontouchend" in document)

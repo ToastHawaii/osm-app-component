@@ -42,7 +42,6 @@ export function createOverPassLayer<M>(
   icon: string,
   query: string,
   attributes: Attribute<M>[],
-  attributeDescriptions: Attribute<{}>[],
   local: any,
   color: string,
   minZoom: number,
@@ -134,9 +133,6 @@ export function createOverPassLayer<M>(
           tags[`description:${local.code || "en"}`] || tags.description || "";
         const attributesGenerator = new Generator<M>(attributes);
         const linksGenerator = new Generator(links);
-        const attributDescriptionGenerator = new Generator(
-          attributeDescriptions
-        );
         let isLoaded = false;
 
         let href: string = "";
@@ -167,9 +163,7 @@ export function createOverPassLayer<M>(
             ? `<br><div>${toSeasonal(model.seasonal, local)}</div>`
             : ``
         }
-        ${
-          model.conditionalFee ? `<br><div>${local.conditionalFee}</div>` : ``
-        } <br/>
+        ${model.conditionalFee ? `<br><div>${local.conditionalFee}</div>` : ``}
         <div class="img-container" style="clear: both;">
         ${
           model.img || model.wikipedia.image
@@ -184,32 +178,39 @@ export function createOverPassLayer<M>(
         <div class="description">
         ${generateHtmlDescription(model)}
         </div>
-        ${attributesGenerator.render(local, tags, value, {} as M)}
-        <div>
-          ${
-            !attributDescriptionGenerator.empty(tags, value, {}, local)
-              ? `
-          <br />
-          <small>
-            ${attributDescriptionGenerator.render(
-              local,
-              tags,
-              value,
-              {},
-              `<br />`
-            )}
-          </small>`
-              : ``
-          }
+        <div class="attributes">
+        ${
+          !attributesGenerator.empty(tags, value, {} as M, local)
+            ? `
+        <br />
+          ${attributesGenerator.render(local, tags, value, {} as M)}`
+            : ``
+        }
         </div>
-        <div class="contact" style="padding-top: 2px;">
+        <div class="contact">
         ${
           !linksGenerator.empty(tags, value, {}, local)
             ? `
-        <br />
-          ${linksGenerator.render(local, tags, value, {})}`
+          <br />
+            ${linksGenerator.render(local, tags, value, {})}`
             : ``
         }
+        </div>
+        <div class="actions">
+         <small>
+         <a href="https://maps.apple.com/?${utilQsString({
+           ll: `${model.address.latitude},${model.address.longitude}`,
+           q: toTitle(model),
+         })}"><i class="far fa-compass"></i>
+           ${local.route}
+         </a>
+         <a href="" class="share button"><i class="fas fa-share-alt"></i> ${
+           local.share
+         }</a>
+         <a href="${href}" class="edit button"><i class="fas fa-pencil-alt"></i> ${
+            local.edit
+          }</a>
+         </small>
         </div>
         <details class="more">
         <summary>${local.documentation}</summary>
@@ -220,18 +221,6 @@ export function createOverPassLayer<M>(
         ${renderTags(tags, local)}
         </table>
         </details>
-        <div class="actions">
-         <small>
-         <a href="https://maps.apple.com/?${utilQsString({
-           ll: `${model.address.latitude},${model.address.longitude}`,
-           q: toTitle(model),
-         })}"><i class="far fa-compass"></i>
-           ${local.route}
-         </a>
-         <a href="" class="share button"><i class="fas fa-share-alt"></i> ${local.share}</a>
-         <a href="${href}" class="edit button"><i class="fas fa-pencil-alt"></i> ${local.edit}</a>
-         </small>
-        </div>
         </div>`
         );
 

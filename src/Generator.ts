@@ -27,7 +27,7 @@ export class Generator<M extends {}> {
 
   public empty(tags: Tags, value: string, model: M, local: Local) {
     return (
-      this.attributes.filter(attribute =>
+      this.attributes.filter((attribute) =>
         attribute.check(tags, value, model, local)
       ).length <= 0
     );
@@ -41,12 +41,12 @@ export class Generator<M extends {}> {
     separator: string = ""
   ) {
     return this.attributes
-      .map(attribute =>
+      .map((attribute) =>
         attribute.check(tags, value, model, local)
           ? attribute.template(local, tags, value, model)
           : ""
       )
-      .filter(el => el)
+      .filter((el) => el)
       .join(separator);
   }
 }

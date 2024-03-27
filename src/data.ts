@@ -19,6 +19,8 @@ import { toWikimediaCommonsUrl, toMapillaryUrl } from "./utilities/image";
 import { toUrl } from "./utilities/url";
 
 export function extractName(tags: any, langCode: string) {
+  if (!tags) return;
+
   return (
     tags[`name:${langCode}`] ||
     tags[`short_name:${langCode}`] ||
@@ -124,5 +126,5 @@ export function getOrDefault(
       arr[names[0]] || {},
       ...names.slice(1, names.length)
     ) as { [name: string]: string };
-  else return ((arr[names[0]] || {}) as unknown) as { [name: string]: string };
+  else return (arr[names[0]] || {}) as unknown as { [name: string]: string };
 }

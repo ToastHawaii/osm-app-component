@@ -153,6 +153,15 @@ export function createOverPassLayer<M>(
             <span class="postal-code">${model.address.postcode}</span>
          <span class="region">${model.address.locality}</span>
         </div>
+        <div class="attributes">
+        ${
+          !attributesGenerator.empty(tags, value, {} as M, local)
+            ? `
+        <br />
+          ${attributesGenerator.render(local, tags, value, {} as M)}`
+            : ``
+        }
+        </div>
         ${
           model.opening
             ? `<br><div>${toOpenOrClose(model.opening, local)}</div>`
@@ -177,15 +186,6 @@ export function createOverPassLayer<M>(
         </div>
         <div class="description">
         ${generateHtmlDescription(model)}
-        </div>
-        <div class="attributes">
-        ${
-          !attributesGenerator.empty(tags, value, {} as M, local)
-            ? `
-        <br />
-          ${attributesGenerator.render(local, tags, value, {} as M)}`
-            : ``
-        }
         </div>
         <div class="contact">
         ${

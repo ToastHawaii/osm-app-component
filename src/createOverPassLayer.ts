@@ -197,6 +197,7 @@ export function createOverPassLayer<M>(
         }
         </div>
         <div class="actions">
+        <br />
          <small>
          <a href="https://maps.apple.com/?${utilQsString({
            ll: `${model.address.latitude},${model.address.longitude}`,
@@ -547,7 +548,9 @@ export async function shareLink(
     copyTextToClipboard(url);
 
     if (target) {
-      const titleElement = createElement("span", local.linkCopied, ["title"]);
+      const titleElement = createElement("span", " " + local.linkCopied, [
+        "title",
+      ]);
 
       target.append(titleElement);
 

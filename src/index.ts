@@ -706,13 +706,11 @@ data-taginfo-taglist-options='{"with_count": true, "lang": "${local.code}"}'>
     for (const k in groups) {
       const group = groups[k];
       const detailsElement = createElement("details");
-      const countElement = createElement(
-        "span",
-        offers.filter((o) => o.startsWith(k + "/")).length
-          ? `(${offers.filter((o) => o.startsWith(k + "/")).length})`
-          : "",
-        ["count"]
-      );
+
+      const count = offers.filter((o) => o.startsWith(k + "/")).length;
+      const countElement = createElement("span", count ? `(${count})` : "", [
+        "count",
+      ]);
       const labelElement = createElement("span", local.group[k]);
       const summaryElement = createElement("summary");
       summaryElement.appendChild(labelElement);
@@ -767,8 +765,8 @@ data-taginfo-taglist-options='{"with_count": true, "lang": "${local.code}"}'>
                 globalFilter
               );
 
-              if (!(filterOptions.length <= 1))
-                params["offers"] = offers.toString();
+              const count = offers.filter((o) => o.startsWith(k + "/")).length;
+              countElement.innerText = count ? `(${count})` : "";
             }
 
             showInfoContainer(f);
@@ -841,10 +839,8 @@ data-taginfo-taglist-options='{"with_count": true, "lang": "${local.code}"}'>
               map.removeLayer(layers[k + "/" + f.value]);
             }
 
-            countElement.innerText = offers.filter((o) => o.startsWith(k + "/"))
-              .length
-              ? `(${offers.filter((o) => o.startsWith(k + "/")).length})`
-              : "";
+            const count = offers.filter((o) => o.startsWith(k + "/")).length;
+            countElement.innerText = count ? `(${count})` : "";
 
             const params = getQueryParams();
             if (!(filterOptions.length <= 1))

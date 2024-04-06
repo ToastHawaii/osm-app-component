@@ -705,11 +705,13 @@ data-taginfo-taglist-options='{"with_count": true, "lang": "${local.code}"}'>
     );
     for (const k in groups) {
       const group = groups[k];
+      let active = 0;
       const detailsElement = createElement("details");
-      const summaryElement = createElement(
-        "summary",
-        `<span>${local.group[k]}</span>`
-      );
+      const countElement = createElement("span", "", ["count"]);
+      const labelElement = createElement("span", local.group[k]);
+      const summaryElement = createElement("summary");
+      summaryElement.appendChild(labelElement);
+      summaryElement.insertBefore(countElement, labelElement);
       detailsElement.appendChild(summaryElement);
 
       for (const f of group) {
@@ -814,6 +816,8 @@ data-taginfo-taglist-options='{"with_count": true, "lang": "${local.code}"}'>
           "change",
           function () {
             if (this.checked) {
+              active++;
+
               offers.push(k + "/" + f.value);
               init(
                 f.group,
@@ -828,11 +832,15 @@ data-taginfo-taglist-options='{"with_count": true, "lang": "${local.code}"}'>
                 globalFilter
               );
             } else {
+              active--;
+
               const index = offers.indexOf(k + "/" + f.value);
               if (index > -1) offers.splice(index, 1);
 
               map.removeLayer(layers[k + "/" + f.value]);
             }
+
+            countElement.innerText = "" + active;
 
             const params = getQueryParams();
             if (!(filterOptions.length <= 1))

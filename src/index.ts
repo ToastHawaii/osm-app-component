@@ -708,7 +708,9 @@ data-taginfo-taglist-options='{"with_count": true, "lang": "${local.code}"}'>
       const detailsElement = createElement("details");
       const countElement = createElement(
         "span",
-        offers.length ? `(${offers.length})` : "",
+        offers.filter((o) => o.startsWith(k + "/")).length
+          ? `(${offers.filter((o) => o.startsWith(k + "/")).length})`
+          : "",
         ["count"]
       );
       const labelElement = createElement("span", local.group[k]);
@@ -839,7 +841,10 @@ data-taginfo-taglist-options='{"with_count": true, "lang": "${local.code}"}'>
               map.removeLayer(layers[k + "/" + f.value]);
             }
 
-            countElement.innerText = offers.length ? `(${offers.length})` : "";
+            countElement.innerText = offers.filter((o) => o.startsWith(k + "/"))
+              .length
+              ? `(${offers.filter((o) => o.startsWith(k + "/")).length})`
+              : "";
 
             const params = getQueryParams();
             if (!(filterOptions.length <= 1))

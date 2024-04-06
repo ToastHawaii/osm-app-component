@@ -705,7 +705,6 @@ data-taginfo-taglist-options='{"with_count": true, "lang": "${local.code}"}'>
     );
     for (const k in groups) {
       const group = groups[k];
-      let active = 0;
       const detailsElement = createElement("details");
       const countElement = createElement("span", "", ["count"]);
       const labelElement = createElement("span", local.group[k]);
@@ -816,8 +815,6 @@ data-taginfo-taglist-options='{"with_count": true, "lang": "${local.code}"}'>
           "change",
           function () {
             if (this.checked) {
-              active++;
-
               offers.push(k + "/" + f.value);
               init(
                 f.group,
@@ -832,15 +829,17 @@ data-taginfo-taglist-options='{"with_count": true, "lang": "${local.code}"}'>
                 globalFilter
               );
             } else {
-              active--;
-
               const index = offers.indexOf(k + "/" + f.value);
               if (index > -1) offers.splice(index, 1);
 
               map.removeLayer(layers[k + "/" + f.value]);
             }
 
-            countElement.innerText = "" + active;
+            if (offers.length) {
+              countElement.innerText = `(${offers.length})`;
+            } else {
+              countElement.innerText = ``;
+            }
 
             const params = getQueryParams();
             if (!(filterOptions.length <= 1))

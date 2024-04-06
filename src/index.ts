@@ -706,7 +706,11 @@ data-taginfo-taglist-options='{"with_count": true, "lang": "${local.code}"}'>
     for (const k in groups) {
       const group = groups[k];
       const detailsElement = createElement("details");
-      const countElement = createElement("span", "", ["count"]);
+      const countElement = createElement(
+        "span",
+        offers.length ? `(${offers.length})` : "",
+        ["count"]
+      );
       const labelElement = createElement("span", local.group[k]);
       const summaryElement = createElement("summary");
       summaryElement.appendChild(labelElement);
@@ -835,11 +839,7 @@ data-taginfo-taglist-options='{"with_count": true, "lang": "${local.code}"}'>
               map.removeLayer(layers[k + "/" + f.value]);
             }
 
-            if (offers.length) {
-              countElement.innerText = `(${offers.length})`;
-            } else {
-              countElement.innerText = ``;
-            }
+            countElement.innerText = offers.length ? `(${offers.length})` : "";
 
             const params = getQueryParams();
             if (!(filterOptions.length <= 1))

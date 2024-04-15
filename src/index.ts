@@ -708,8 +708,6 @@ data-taginfo-taglist-options='{"with_count": true, "lang": "${local.code}"}'>
   document.head.appendChild(style);
 
   if (filterOptions.length > 1) {
-    getHtmlElement("#filters .filters-clear").setAttribute("style", "");
-
     const groups = groupBy(
       filterOptions
         .sort((a, b) =>

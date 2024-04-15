@@ -768,29 +768,12 @@ data-taginfo-taglist-options='{"with_count": true, "lang": "${local.code}"}'>
             const input = getHtmlElement("input", contentElement);
             if (!input.checked) {
               input.checked = true;
-              offers.push(k + "/" + f.value);
-              init(
-                f.group,
-                f.value,
-                f.icon,
-                f.query,
-                attributes,
-                local,
-                f.color,
-                minZoom,
-                filterOptions.length <= 1,
-                globalFilter
-              );
-
-              const count = offers.filter((o) => o.startsWith(k + "/")).length;
-              countElement.innerText = count ? `(${count})` : "";
+              input.dispatchEvent(new Event("change"));
             }
 
             showInfoContainer(f);
 
             params["info"] = f.group + "/" + f.value;
-
-            setQueryParams(params);
 
             partAreaVisible();
 

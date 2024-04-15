@@ -869,6 +869,7 @@ data-taginfo-taglist-options='{"with_count": true, "lang": "${local.code}"}'>
 
             updateCount(local, minZoom);
 
+            alert(filterOptions.length )
             if (!(filterOptions.length > 1)) {
               alert("sadf")
               document.querySelector("#filters .filters-clear").setAttribute(

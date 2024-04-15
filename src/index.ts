@@ -708,12 +708,11 @@ data-taginfo-taglist-options='{"with_count": true, "lang": "${local.code}"}'>
   document.head.appendChild(style);
 
   if (!(filterOptions.length > 1)) {
-    getHtmlElement("#filters .right-collapse").setAttribute(
-      "style",
-      "display:none;"
-    );
+    document
+      .querySelector("#filters .filters-clear")
+      .setAttribute("style", "display:none;");
   } else {
-    getHtmlElement("#filters .right-collapse").setAttribute("style", "");
+    document.querySelector("#filters .filters-clear").setAttribute("style", "");
 
     const groups = groupBy(
       filterOptions

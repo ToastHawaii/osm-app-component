@@ -155,7 +155,11 @@ export async function initMap<M>(
   });
 
   getHtmlElement("#filters .filters-clear").addEventListener("click", () => {
-    setQueryParams({});
+    const inputs = getHtmlElements("#filters input");
+
+    for (const input of inputs) {
+      input.checked = false;
+    }
   });
 
   (getHtmlElement(".about") as HTMLLinkElement).href = combine(
@@ -834,6 +838,7 @@ data-taginfo-taglist-options='{"with_count": true, "lang": "${local.code}"}'>
 
           detailsElement.insertBefore(contentElement, group);
         }
+
         getHtmlElement("input", contentElement).addEventListener(
           "change",
           function () {

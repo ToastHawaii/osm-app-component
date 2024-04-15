@@ -870,12 +870,12 @@ data-taginfo-taglist-options='{"with_count": true, "lang": "${local.code}"}'>
             updateCount(local, minZoom);
 
             if (!(filterOptions.length > 1)) {
-              getHtmlElement("#filters .filters-clear").setAttribute(
+              document.querySelector("#filters .filters-clear").setAttribute(
                 "style",
                 "display:none;"
               );
             } else {
-              getHtmlElement("#filters .filters-clear").setAttribute(
+              document.querySelector("#filters .filters-clear").setAttribute(
                 "style",
                 ""
               );

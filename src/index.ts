@@ -870,11 +870,13 @@ data-taginfo-taglist-options='{"with_count": true, "lang": "${local.code}"}'>
             updateCount(local, minZoom);
 
             if (!(filterOptions.length > 1)) {
+              alert("sadf")
               document.querySelector("#filters .filters-clear").setAttribute(
                 "style",
                 "display:none;"
               );
             } else {
+              alert("test")
               document.querySelector("#filters .filters-clear").setAttribute(
                 "style",
                 ""

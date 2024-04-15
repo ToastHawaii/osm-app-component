@@ -869,17 +869,10 @@ data-taginfo-taglist-options='{"with_count": true, "lang": "${local.code}"}'>
 
             updateCount(local, minZoom);
 
-            alert(offers.length);
-            if (!(offers.length > 1)) {
-              alert("sadf");
-              document
-                .querySelector("#filters .filters-clear")
-                .setAttribute("style", "display:none;");
+            if (offers.length >= 1) {
+              getHtmlElement("#filters .filters-clear").style.display = "";
             } else {
-              alert("test");
-              document
-                .querySelector("#filters .filters-clear")
-                .setAttribute("style", "");
+              getHtmlElement("#filters .filters-clear").style.display = "none";
             }
           }
         );

@@ -707,12 +707,8 @@ data-taginfo-taglist-options='{"with_count": true, "lang": "${local.code}"}'>
   const style = createElement("style", iconColors);
   document.head.appendChild(style);
 
-  if (!(filterOptions.length > 1)) {
-    document
-      .querySelector("#filters .filters-clear")
-      .setAttribute("style", "display:none;");
-  } else {
-    document.querySelector("#filters .filters-clear").setAttribute("style", "");
+  if (filterOptions.length > 1) {
+    getHtmlElement("#filters .filters-clear").setAttribute("style", "");
 
     const groups = groupBy(
       filterOptions
@@ -872,6 +868,18 @@ data-taginfo-taglist-options='{"with_count": true, "lang": "${local.code}"}'>
             setQueryParams(params);
 
             updateCount(local, minZoom);
+
+            if (!(filterOptions.length > 1)) {
+              getHtmlElement("#filters .filters-clear").setAttribute(
+                "style",
+                "display:none;"
+              );
+            } else {
+              getHtmlElement("#filters .filters-clear").setAttribute(
+                "style",
+                ""
+              );
+            }
           }
         );
       }

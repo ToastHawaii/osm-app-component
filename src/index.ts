@@ -157,8 +157,9 @@ export async function initMap<M>(
   getHtmlElement("#filters .filters-clear").addEventListener("click", () => {
     const inputs = getHtmlElements("#filters input");
 
-    for (const input of inputs) {
+    for (const input of inputs.filter((i) => i.checked)) {
       input.checked = false;
+      input.dispatchEvent(new Event("change"));
     }
   });
 

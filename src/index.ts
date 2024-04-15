@@ -163,6 +163,12 @@ export async function initMap<M>(
     }
   });
 
+  if (offers.length >= 1) {
+    getHtmlElement("#filters .filters-clear").style.display = "";
+  } else {
+    getHtmlElement("#filters .filters-clear").style.display = "none";
+  }
+
   (getHtmlElement(".about") as HTMLLinkElement).href = combine(
     baseUrl,
     `${local.code ? `${local.code}/` : ""}docs`

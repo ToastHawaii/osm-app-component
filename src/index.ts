@@ -146,6 +146,18 @@ export async function initMap<M>(
     getHtmlElement(".menu-group").classList.toggle("collapsed");
   });
 
+  getHtmlElement("#filters .right-collapse").addEventListener("click", () => {
+    if (document.getElementById("filters")?.className) {
+      document.getElementById("filters")?.classList.remove("right-collapsed");
+    } else {
+      document.getElementById("filters")?.classList.add("right-collapsed");
+    }
+  });
+
+  getHtmlElement("#filters .filters-clear").addEventListener("click", () => {
+    setQueryParams({});
+  });
+
   (getHtmlElement(".about") as HTMLLinkElement).href = combine(
     baseUrl,
     `${local.code ? `${local.code}/` : ""}docs`
@@ -690,7 +702,14 @@ data-taginfo-taglist-options='{"with_count": true, "lang": "${local.code}"}'>
   const style = createElement("style", iconColors);
   document.head.appendChild(style);
 
-  if (filterOptions.length > 1) {
+  if (!(filterOptions.length > 1)) {
+    getHtmlElement("#filters .right-collapse").setAttribute(
+      "style",
+      "display:none;"
+    );
+  } else {
+    getHtmlElement("#filters .right-collapse").setAttribute("style", "");
+
     const groups = groupBy(
       filterOptions
         .sort((a, b) =>
